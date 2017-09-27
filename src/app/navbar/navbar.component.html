@@ -1,0 +1,17 @@
+<md-toolbar color="primary">
+  <a routerLink="/">NgMaterialScaffold</a>
+
+  <span class="example-fill-remaining-space"></span>
+
+  <span *ngIf="loggedIn()">
+    <button md-button (click)="logout()" color="secondary">
+      Logout
+    </button>
+    <button md-raised-button routerLink="/dashboard" color="accent">
+      Dashboard
+    </button>
+  </span>
+  <a routerLink="/auth" *ngIf="!loggedIn()">
+    <md-icon class="account_box">account_box</md-icon>
+  </a>
+</md-toolbar>
