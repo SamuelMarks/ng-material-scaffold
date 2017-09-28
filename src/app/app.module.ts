@@ -11,6 +11,7 @@ import { appRoutes } from './app.routes';
 import { AuthGuard } from './auth/auth.guard';
 import { FooterModule } from './footer/footer.module';
 import { AlertsService } from './alerts/alerts.service';
+import { AuthService } from '../api/auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { AlertsService } from './alerts/alerts.service';
     NavbarModule,
     FooterModule
   ],
-  providers: [AlertsService, AuthGuard],
+  providers: [AlertsService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

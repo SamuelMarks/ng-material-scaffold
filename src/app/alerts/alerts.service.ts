@@ -10,7 +10,7 @@ export class AlertsService {
     // this.alerts = [];
   }
 
-  public add(alert: string | TAlert | Error, action?: string, config?: MdSnackBarConfig) {
+  public add(alert: string | TAlert | Error, action?: string, config?: MdSnackBarConfig): void {
     const alert_s = typeof alert === 'string' ? alert
       : (alert instanceof Error ? alert.message : Object
         .keys(alert)

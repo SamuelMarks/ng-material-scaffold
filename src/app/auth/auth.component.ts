@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../api/auth/auth.service';
 import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
+import { AlertsService } from '../alerts/alerts.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,7 +17,8 @@ export class AuthComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
               private fb: FormBuilder,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private alertsService: AlertsService) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -37,12 +39,11 @@ export class AuthComponent implements OnInit, AfterViewInit {
       .signinup(this.form.value as IAuthReq)
       .subscribe((_user: IAuthReq | ILoginResp) => {
           if (_user.hasOwnProperty('access_token')) {
-            this.authService.access_token = (_user as ILoginResp).access_token;
-            localStorage.setItem('access-token', this.authService.access_token);
+            this.authService._login(_user as ILoginResp);
             this.router
               .navigate(['/dashboard'])
               .then(() => {});
-          }
+          } else this.alertsService.add(`Unexpected: ${JSON.stringify(_user)};`);
         }
       );
   }
