@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../api/auth/auth.service';
-import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
-import { AlertsService } from '../alerts/alerts.service';
+import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
+import { AuthService } from '../../../api/auth/auth.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AlertsService } from '../../alerts/alerts.service';
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  selector: 'app-signinup',
+  templateUrl: './signinup.component.html',
+  styleUrls: ['./signinup.component.css']
 })
-export class AuthComponent implements OnInit, AfterViewInit {
+export class SigninupComponent implements OnInit, AfterViewInit {
   auth = new FormControl();
   form: FormGroup;
 

@@ -8,6 +8,10 @@ import { TAlert } from './alerts.types';
 export class AlertsService {
   alerts: string[];
 
+  constructor(private snackBar: MatSnackBar) {
+    this.alerts = [];
+  }
+
   static s_from_alert(alert: string | TAlert | Error): string {
     if (alert == null) return 'undefined error';
 
@@ -27,10 +31,6 @@ export class AlertsService {
       .keys(alert)
       .map(k => alert[k])
       .join('\t');
-  }
-
-  constructor(private snackBar: MatSnackBar) {
-    this.alerts = [];
   }
 
   public add(alert: string | TAlert | Error, action?: string | false, config?: MatSnackBarConfig): void {
