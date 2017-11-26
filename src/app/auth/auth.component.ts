@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
               private fb: FormBuilder,
-              private authService: AuthService,
+              public authService: AuthService,
               private alertsService: AlertsService) {}
 
   ngOnInit() {

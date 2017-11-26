@@ -1,36 +1,36 @@
 import { NgModule } from '@angular/core';
 import {
-  MdAutocompleteModule,
-  MdButtonModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdCommonModule,
-  MdDialogModule,
-  MdFormFieldModule,
-  MdGridListModule,
-  MdIconModule,
-  MdInputModule,
-  MdMenuModule,
-  MdProgressBarModule,
-  MdSidenavModule,
-  MdSnackBarModule,
-  MdToolbarModule
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatCommonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatProgressBarModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule
 } from '@angular/material';
 
 @NgModule({
   imports: [
-    MdCommonModule,
-    MdAutocompleteModule, MdButtonModule, MdCardModule, MdCheckboxModule,
-    MdCommonModule, MdDialogModule, MdFormFieldModule, MdGridListModule,
-    MdIconModule, MdInputModule, MdMenuModule, MdProgressBarModule,
-    MdSidenavModule, MdSnackBarModule, MdToolbarModule
+    MatCommonModule,
+    MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule,
+    MatCommonModule, MatDialogModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
+    MatSidenavModule, MatSnackBarModule, MatToolbarModule
   ],
   exports: [
-    MdCommonModule,
-    MdAutocompleteModule, MdButtonModule, MdCardModule, MdCheckboxModule,
-    MdCommonModule, MdDialogModule, MdFormFieldModule, MdGridListModule,
-    MdIconModule, MdInputModule, MdMenuModule, MdProgressBarModule,
-    MdSidenavModule, MdSnackBarModule, MdToolbarModule
+    MatCommonModule,
+    MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule,
+    MatCommonModule, MatDialogModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
+    MatSidenavModule, MatSnackBarModule, MatToolbarModule
   ]
 })
 export class MaterialImportModule {

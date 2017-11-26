@@ -1,13 +1,21 @@
-<form [formGroup]="form" (ngSubmit)="signInUp()" *ngIf="form && !logged_in" novalidate>
-  <p>
-    <md-form-field class="example-full-width form-group">
-      <input mdInput formControlName="email" type="email" name="email" id="email" placeholder="Email">
-    </md-form-field>
+<mat-card>
+  <mat-card-header><h1 class="mat-h1">Sign in/up</h1></mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="signInUp()" *ngIf="!authService.loggedIn()" novalidate>
+      <mat-form-field class="example-full-width form-group">
+        <input matInput formControlName="email" type="email" name="email" id="email" placeholder="Email">
+      </mat-form-field>
 
-    <md-form-field class="example-full-width form-group">
-      <input mdInput formControlName="password" type="password" name="password" id="password" placeholder="Password">
-    </md-form-field>
-  </p>
+      <mat-form-field class="example-full-width form-group">
+        <input matInput formControlName="password" type="password" name="password" id="password"
+               placeholder="Password">
+      </mat-form-field>
 
-  <button md-raised-button type="submit">Sign in/up</button>
-</form>
+      <button mat-raised-button type="submit"
+              color="accent" fxLayout="row">Auth
+      </button>
+    </form>
+
+    <p *ngIf="authService.loggedIn()">You are logged in.</p>
+  </mat-card-content>
+</mat-card>
