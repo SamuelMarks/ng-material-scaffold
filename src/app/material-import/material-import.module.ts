@@ -12,6 +12,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatProgressBarModule,
+  MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule
@@ -23,14 +24,13 @@ import {
     MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule,
     MatCommonModule, MatDialogModule, MatFormFieldModule, MatGridListModule,
     MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
-    MatSidenavModule, MatSnackBarModule, MatToolbarModule
+    MatSelectModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule
   ],
   exports: [
-    MatCommonModule,
     MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule,
     MatCommonModule, MatDialogModule, MatFormFieldModule, MatGridListModule,
     MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
-    MatSidenavModule, MatSnackBarModule, MatToolbarModule
+    MatSelectModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule
   ]
 })
 export class MaterialImportModule {

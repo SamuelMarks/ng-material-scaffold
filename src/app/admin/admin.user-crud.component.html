@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="onNoClick()">
+  <mat-form-field>
+    <input type="email" matInput formControlName="email" placeholder="Email" required>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="form.controls['password'].enabled">
+    <input type="password" matInput formControlName="password" placeholder="Password" required>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select matInput formControlName="roles" placeholder="Role" multiple>
+      <mat-option *ngFor="let role of roles" [value]="role">
+        {{ role }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button class="btn" [disabled]="form.invalid" type="submit" *ngIf="!data">
+    <mat-icon>add_to_queue</mat-icon>
+    Create
+  </button>
+  <ng-container *ngIf="data">
+    <button mat-raised-button class="btn" [disabled]="form.invalid" type="submit">
+      <mat-icon>update</mat-icon>
+      Update
+    </button>
+    <button mat-raised-button class="btn" (click)="onNoClick(true)">
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </ng-container>
+</form>
