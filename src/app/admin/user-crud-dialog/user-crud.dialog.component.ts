@@ -2,18 +2,19 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { IUser } from '../../api/user/user.interfaces';
+import { IUser } from '../../../api/user/user.interfaces';
 
 @Component({
   selector: 'app-admin.user-crud',
-  templateUrl: './admin.user-crud.component.html',
-  styleUrls: ['./admin.user-crud.component.css']
+  templateUrl: './user-crud.dialog.component.html',
+  styleUrls: ['./user-crud.dialog.component.css']
 })
 export class UserCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];
   roles = UserCrudDialogComponent.roles;
   form: FormGroup;
   default_roles = UserCrudDialogComponent.roles.slice(0, 2);
+  destroy = false;
 
   constructor(public dialogRef: MatDialogRef<UserCrudDialogComponent>,
               @Optional() @Inject(MAT_DIALOG_DATA) public data: IUser) {}
@@ -33,7 +34,7 @@ export class UserCrudDialogComponent implements OnInit {
     }
   }
 
-  onNoClick(destroy?: boolean): void {
-    this.dialogRef.close(typeof destroy === 'undefined' ? this.form.value : destroy);
+  onNoClick() {
+    this.dialogRef.close(this.destroy ? this.destroy : this.form.value);
   }
 }

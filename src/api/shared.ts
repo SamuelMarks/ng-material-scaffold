@@ -6,6 +6,5 @@ interface I {
 }
 
 export const parseDates = <T>(obj: T & I & {updatedAt: string, createdAt: string}): T & I => Object.assign(obj, {
-  createdAt: obj.createdAt === 'string' ? new Date(obj.createdAt) : obj.createdAt,
-  updatedAt: obj.updatedAt === 'string' ? new Date(obj.updatedAt) : obj.updatedAt
+  createdAt: new Date(obj.createdAt), updatedAt: new Date(obj.updatedAt)
 });

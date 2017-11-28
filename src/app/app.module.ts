@@ -17,9 +17,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule,
     RouterModule, RouterModule.forRoot(appRoutes),

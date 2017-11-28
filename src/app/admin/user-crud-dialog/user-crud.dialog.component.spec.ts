@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserCrudDialogComponent } from './admin.user-crud.component';
+import { UserCrudDialogComponent } from './user-crud.dialog.component';
 
 describe('UserCrudDialogComponent', () => {
   let component: UserCrudDialogComponent;

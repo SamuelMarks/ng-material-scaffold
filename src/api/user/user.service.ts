@@ -22,28 +22,27 @@ export class UserService {
       .map(parseDates);
   }
 
-  read(): Observable<IUser> {
+  read(user_id?: string): Observable<IUser> {
     return this.http
-      .get<IUser>('/api/user')
+      .get<IUser>(`/api/user${user_id == null ? '' : '/' + user_id}`)
       .map(parseDates);
   }
 
-  update(user: IUser): Observable<IUser> {
+  update(user: IUser, user_id?: string): Observable<IUser> {
     return this.http
-      .put<IUser>('/api/user', user)
+      .put<IUser>(`/api/user${user_id == null ? '' : '/' + user_id}`, user)
       .map(parseDates);
   }
 
-  destroy(user: IUser): Observable<IUser> {
+  destroy(user_id: string): Observable<{}> {
     return this.http
-      .delete<IUser>('/api/user')
-      .map(parseDates);
+      .delete(`/api/user/${user_id}`);
   }
 
   getAll(): Observable<IUser[]> {
     return this.http
       .get<{users: IUser[]}>('/api/users')
-      .map(users => users.users)
+      .map(users => users.users.sort((a, b) => a.email.localeCompare(b.email))) // TODO: sort server-side
       .map(users => users.map(parseDates));
   }
 }
