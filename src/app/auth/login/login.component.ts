@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../../api/auth/auth.service';
 import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
 import { AlertsService } from '../../alerts/alerts.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('access-token', this.authService.access_token);
 
           this.router
-            .navigate(['/dashboard'])
+            .navigate(['/secret-dashboard'])
             .then(() => {});
         }
       );

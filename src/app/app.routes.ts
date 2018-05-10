@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './auth/auth.guard';
+import { hasRole } from './auth/auth.guard';
+
 
 export const appRoutes: Routes = [
-  { path: '', loadChildren: 'app/home/home.module#HomeModule' },
-  { path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule' },
-  { path: 'auth', loadChildren: 'app/auth/auth.module#AuthModule' },
+  { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+  { path: 'admin', loadChildren: './admin/admin.module#AdminModule' },
+  { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
   {
-    path: 'dashboard', loadChildren: 'app/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard]
-  },
+    path: 'secret-dashboard', loadChildren: './secret-dashboard/secret-dashboard.module#SecretDashboardModule',
+    canActivate: [hasRole('admin')]
+  }
 ];

@@ -30,7 +30,7 @@ export class SigninupComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     if (AuthService.loggedIn())
       this.router
-        .navigate(['/dashboard'])
+        .navigate(['/secret-dashboard'])
         .then(() => {});
   }
 
@@ -40,9 +40,15 @@ export class SigninupComponent implements OnInit, AfterViewInit {
       .subscribe((_user: IAuthReq | ILoginResp) => {
           if (_user.hasOwnProperty('access_token')) {
             this.authService._login(_user as ILoginResp);
-            this.router
-              .navigate(['/dashboard'])
-              .then(() => {});
+            console.info('SigninupComponent::signInUp::before navigate');
+            this.router.navigateByUrl('/secret-dashboard')
+            /*this.router
+              .navigate(['/secret-dashboard'])*/
+              .then(() => {
+                console.info('SigninupComponent::signInUp::onfulfilled');
+              })
+              .catch(e => console.error('SigninupComponent::signInUp::onrejected'));
+            console.info('SigninupComponent::signInUp::after navigate');
           } else this.alertsService.add(`Unexpected: ${JSON.stringify(_user)};`);
         }
       );

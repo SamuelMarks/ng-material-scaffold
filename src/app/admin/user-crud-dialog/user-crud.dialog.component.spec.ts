@@ -8,9 +8,9 @@ describe('UserCrudDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserCrudDialogComponent ]
+      declarations: [UserCrudDialogComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

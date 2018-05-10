@@ -6,11 +6,12 @@ import { MatInputModule } from '@angular/material';
 
 import { AuthService } from '../../api/auth/auth.service';
 import { MaterialImportModule } from '../material-import/material-import.module';
-import { authRoutes } from './auth.routes';
-import { LogoutComponent } from './logout/logout.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { SigninupComponent } from './signinup/signinup.component';
+import { authRoutes } from './auth.routes';
+import { LogoutComponent } from './logout/logout.component';
+
 
 @NgModule({
   imports: [
@@ -23,4 +24,5 @@ import { SigninupComponent } from './signinup/signinup.component';
     SignupComponent, LoginComponent, SigninupComponent, LogoutComponent
   ]
 })
-export class AuthModule {}
+export class AuthModule {
+}
