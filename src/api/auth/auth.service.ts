@@ -31,7 +31,8 @@ export class AuthService {
   }
 
   static hasRole(role: string): boolean {
-    return AuthService.getAccessToken().indexOf(role) > -1;
+    const at = AuthService.getAccessToken() || '';
+    return at.indexOf(role) > -1;
   }
 
   logout() {

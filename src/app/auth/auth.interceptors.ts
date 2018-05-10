@@ -30,7 +30,6 @@ export class AuthInterceptor implements HttpInterceptor {
                 /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
                   this.alertsService.add('Authentication required');
 
-
                   this.router
                     .navigate(['auth'], {queryParams: {redirectUrl: this.router.url}})
                     .then(success =>
