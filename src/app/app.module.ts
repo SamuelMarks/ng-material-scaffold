@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LayoutModule } from '@angular/cdk/layout';
 import { RouterModule } from '@angular/router';
-import { OverlayModule } from '@angular/cdk/overlay';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+
+import { LayoutModule } from '@angular/cdk/layout';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { SidenavModule } from './sidenav/sidenav.module';
 import { AlertsModule } from './alerts/alerts.module';
@@ -36,5 +37,4 @@ import { AppComponent } from './app.component';
   }],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

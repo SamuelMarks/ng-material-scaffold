@@ -1,9 +1,13 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { AuthService } from '../../api/auth/auth.service';
 import { Router } from '@angular/router';
+
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material';
+
+import { Observable } from 'rxjs';
+
+import { AuthService } from '../../api/auth/auth.service';
+
 
 @Component({
   selector: 'app-sidenav',

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { URLSearchParams } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
@@ -13,18 +14,29 @@ export class AuthGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-
-    console.info('!next.data =', !next.data, ';');
-    console.info('next.data =', next.data, ';');
-    if (AuthService.loggedIn() && (!next.data || !next.data.role || AuthService.hasRole(next.data.role)))
+    const correctRole = next.data && next.data.role ? AuthService.hasRole(next.data.role) : null;
+    if (AuthService.loggedIn() && (correctRole == null || correctRole))
       return true;
 
-    const url: string = state.url;
+    const [url /* :string */, qp /*URLSearchParams['paramsMap']*/] = ((question: number): [string, URLSearchParams['paramsMap']] => {
+      if (question < 0) return [state.url, new Map<string, string[]>()];
+      return [state.url.slice(0, question), new URLSearchParams(state.url.slice(question + 1)).paramsMap];
+    })(state.url.indexOf('?'));
 
-    this.alertsService.add(`${next.data && next.data.role ? 'Only ' + next.data.role + ' can' : 'Auth required to'} view ${url}`);
+    const msg = `${correctRole != null ? 'Only ' + next.data.role + ' can' : 'Auth required to'} view ${url}`;
+
+    this.alertsService.add(msg);
+    console.error(msg);
+
+    qp.set('redirectUrl', [url]);
+    const queryParams = Array.from(qp)
+      .reduce((obj, [key, value]) => (
+        key !== 'redirectUrl' || value[0] !== '/auth' ?
+          Object.assign(obj, { [key]: value[0] }) : obj
+      ), {});
     this.router
       .navigate(['/auth'],
-        { queryParams: { redirectUrl: url } }); // .then(() => {});
+        { queryParams }); // .then(() => {});
     return false;
   }
 }

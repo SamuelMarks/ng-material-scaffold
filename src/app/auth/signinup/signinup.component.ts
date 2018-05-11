@@ -1,10 +1,12 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
 import { AuthService } from '../../../api/auth/auth.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertsService } from '../../alerts/alerts.service';
+import { getRedirectUrl } from '../../app.routes';
+
 
 @Component({
   selector: 'app-signinup',
@@ -30,7 +32,7 @@ export class SigninupComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     if (AuthService.loggedIn())
       this.router
-        .navigate(['/secret-dashboard'])
+        .navigate([getRedirectUrl(location.href) || '/secret-dashboard'])
         .then(() => {});
   }
 
@@ -40,15 +42,9 @@ export class SigninupComponent implements OnInit, AfterViewInit {
       .subscribe((_user: IAuthReq | ILoginResp) => {
           if (_user.hasOwnProperty('access_token')) {
             this.authService._login(_user as ILoginResp);
-            console.info('SigninupComponent::signInUp::before navigate');
-            this.router.navigateByUrl('/secret-dashboard')
-            /*this.router
-              .navigate(['/secret-dashboard'])*/
-              .then(() => {
-                console.info('SigninupComponent::signInUp::onfulfilled');
-              })
-              .catch(e => console.error('SigninupComponent::signInUp::onrejected'));
-            console.info('SigninupComponent::signInUp::after navigate');
+            this.router.navigateByUrl(getRedirectUrl(location.href) || '/secret-dashboard')
+              .then(() => {})
+              .catch(console.error);
           } else this.alertsService.add(`Unexpected: ${JSON.stringify(_user)};`);
         }
       );

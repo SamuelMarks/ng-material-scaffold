@@ -5,6 +5,7 @@ import { ServerStatusService } from '../../api/server-status/server-status.servi
 import { IServerStatus } from '../../api/server-status/server-status.interfaces';
 import { AlertsService } from '../alerts/alerts.service';
 
+
 @Component({
   selector: 'app-server-status',
   templateUrl: './server-status.component.html',
@@ -17,7 +18,7 @@ export class ServerStatusComponent implements OnInit {
               private alertsService: AlertsService) {}
 
   ngOnInit() {
-    this.serverStatus = { version: 'App 0.0.8; ' };
+    this.serverStatus = { version: 'App 0.0.9; ' };
     this.serverStatusService
       .get()
       .subscribe(

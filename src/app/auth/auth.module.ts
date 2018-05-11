@@ -9,8 +9,8 @@ import { MaterialImportModule } from '../material-import/material-import.module'
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { SigninupComponent } from './signinup/signinup.component';
-import { authRoutes } from './auth.routes';
 import { LogoutComponent } from './logout/logout.component';
+import { authRoutes } from './auth.routes';
 
 
 @NgModule({

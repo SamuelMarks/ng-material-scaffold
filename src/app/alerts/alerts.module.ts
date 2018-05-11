@@ -1,7 +1,9 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule } from '@angular/material';
+
 import { AlertsService } from './alerts.service';
+
 
 @NgModule({
   imports: [

@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 import { AlertsService } from '../../app/alerts/alerts.service';
 import { IAuthReq, ILoginResp } from './auth.interfaces';
-import { throwError } from 'rxjs/internal/observable/throwError';
 
 
 @Injectable()

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ServerStatusComponent } from './server-status.component';
-import { MaterialImportModule } from '../material-import/material-import.module';
 import { ServerStatusService } from '../../api/server-status/server-status.service';
+import { MaterialImportModule } from '../material-import/material-import.module';
+import { ServerStatusComponent } from './server-status.component';
+
 
 @NgModule({
   imports: [

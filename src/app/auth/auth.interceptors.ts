@@ -3,11 +3,11 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs/internal/observable/throwError';
 
 
 @Injectable()
