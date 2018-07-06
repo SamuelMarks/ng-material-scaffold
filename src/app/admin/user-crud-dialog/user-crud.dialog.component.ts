@@ -12,7 +12,11 @@ import { IUser } from '../../../api/user/user.interfaces';
 export class UserCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];
   roles = UserCrudDialogComponent.roles;
-  form: FormGroup;
+  form: FormGroup = new FormGroup({
+    email: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.minLength(3)),
+    roles: new FormControl('', Validators.required)
+  });
   default_roles = UserCrudDialogComponent.roles.slice(0, 2);
   destroy = false;
 
@@ -20,11 +24,6 @@ export class UserCrudDialogComponent implements OnInit {
               @Optional() @Inject(MAT_DIALOG_DATA) public data: IUser) {}
 
   ngOnInit() {
-    this.form = new FormGroup({
-      email: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.minLength(3)),
-      roles: new FormControl('', Validators.required)
-    });
     if (this.data === null)
       this.form.patchValue({ roles: this.default_roles });
     else {
@@ -34,7 +33,7 @@ export class UserCrudDialogComponent implements OnInit {
     }
   }
 
-  onNoClick() {
+  closeDialog() {
     this.dialogRef.close(this.destroy ? this.destroy : this.form.value);
   }
 }

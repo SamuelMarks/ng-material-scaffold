@@ -1,25 +1,28 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from '../../api/auth/auth.service';
-
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css']
 })
-export class SidenavComponent implements AfterViewInit {
-  @ViewChild('drawer') drawer: MatSidenav;
-
-  isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
+export class SidenavComponent implements AfterContentInit {
   loggedIn: typeof AuthService.loggedIn;
   hasRole: typeof AuthService.hasRole;
+
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(map(result => result.matches));
+
+  @Input() openedSubject: Subject<boolean>;
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
   constructor(private breakpointObserver: BreakpointObserver,
               private router: Router) {
@@ -27,9 +30,14 @@ export class SidenavComponent implements AfterViewInit {
     this.hasRole = AuthService.hasRole;
   }
 
-  ngAfterViewInit() {
-    this.router.events.subscribe(events =>
-      this.drawer.opened && this.drawer.toggle()
+  ngAfterContentInit() {
+    this.openedSubject.subscribe(
+      open => this.sidenav[open ? 'open' : 'close']()
     );
+    this.router.events.subscribe(() => this.openedSubject.next(false));
+  }
+
+  toggle() {
+    this.openedSubject.next(!this.sidenav.opened);
   }
 }

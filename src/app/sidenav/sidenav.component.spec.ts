@@ -1,6 +1,5 @@
-
-import { fakeAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { SidenavComponent } from './sidenav.component';
 
 describe('SidenavComponent', () => {
@@ -9,7 +8,8 @@ describe('SidenavComponent', () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidenavComponent ]
+      imports: [MatSidenavModule],
+      declarations: [SidenavComponent]
     })
     .compileComponents();
 

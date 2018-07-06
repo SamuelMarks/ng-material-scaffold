@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header><h1 class="mat-h1">Signup</h1></mat-card-header>
   <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="signup()" *ngIf="!authService.loggedIn()" novalidate>
+    <form [formGroup]="form" (ngSubmit)="signup()" *ngIf="!authService.loggedIn()" novalidate fxLayout="column">
       <mat-form-field class="example-full-width form-group">
         <input matInput formControlName="email" type="email" name="email" id="email" placeholder="Email">
       </mat-form-field>

@@ -28,6 +28,8 @@ export class AuthGuard implements CanActivate {
     this.alertsService.add(msg);
     console.error(msg);
 
+    if (correctRole != null) return false;
+
     qp.set('redirectUrl', [url]);
     const queryParams = Array.from(qp)
       .reduce((obj, [key, value]) => (

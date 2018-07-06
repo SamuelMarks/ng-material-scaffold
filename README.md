@@ -5,7 +5,7 @@ Simple scaffold generated with `@angular/cli` then implemented manually.
 
 ## Update version
 
-    sed -i "/this.serverStatus =/c\    this.serverStatus = {version: 'App $(jq -r .version package.json); '};" src/app/server-status/server-status.component.ts
+    sed -i "/this.serverStatus =/c\    this.serverStatus = { version: '@ $(jq -r .version package.json); '};" src/app/server-status/server-status.component.ts
 
 ## Deploy distribution
 Clone [ng-material-scaffold-dist](https://github.com/SamuelMarks/ng-material-scaffold-dist) one directory above, then:
@@ -14,7 +14,7 @@ Clone [ng-material-scaffold-dist](https://github.com/SamuelMarks/ng-material-sca
 
 ---
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Development server
 

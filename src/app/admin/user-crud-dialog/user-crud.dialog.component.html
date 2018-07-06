@@ -1,8 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="onNoClick()">
-  <mat-form-field *ngIf="!data">
+<form [formGroup]="form" (ngSubmit)="closeDialog()">
+  <mat-form-field *ngIf="!data || !data.email">
     <input type="email" matInput formControlName="email" placeholder="Email" required>
   </mat-form-field>
-  <h3 class="mat-h3" #elseBlock>{{data.email}}</h3>
+  <h3 class="mat-h3" *ngIf="data && data.email">{{data.email}}</h3>
 
   <mat-form-field *ngIf="form.controls['password'].enabled">
     <input type="password" matInput formControlName="password" placeholder="Password" required>
