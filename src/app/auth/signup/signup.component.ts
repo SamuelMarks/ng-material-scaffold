@@ -3,14 +3,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 
-import { IAuthReq } from '../../../api/auth/auth.interfaces';
 import { AuthService } from '../../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
+import { IAuthReq } from '../../../api/auth/auth.interfaces';
+
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
   auth = new FormControl();

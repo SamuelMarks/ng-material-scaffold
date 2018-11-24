@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard.component';
 
 
 @NgModule({
+  declarations: [DashboardComponent],
   imports: [
     CommonModule, RouterModule, RouterModule.forChild(dashboardRoutes),
     MatGridListModule,
@@ -16,8 +17,6 @@ import { DashboardComponent } from './dashboard.component';
     MatMenuModule,
     MatIconModule,
     MatButtonModule
-  ],
-  declarations: [DashboardComponent],
-  exports: [DashboardComponent]
+  ]
 })
 export class DashboardModule {}

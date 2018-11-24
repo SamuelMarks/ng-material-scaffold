@@ -4,23 +4,24 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { IUser } from '../../../api/user/user.interfaces';
 
+
 @Component({
-  selector: 'app-admin.user-crud',
-  templateUrl: './user-crud.dialog.component.html',
-  styleUrls: ['./user-crud.dialog.component.css']
+  selector: 'app-user-admin-crud-dialog',
+  templateUrl: './user-admin-crud-dialog.component.html',
+  styleUrls: ['./user-admin-crud-dialog.component.scss']
 })
-export class UserCrudDialogComponent implements OnInit {
+export class UserAdminCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];
-  roles = UserCrudDialogComponent.roles;
+  roles = UserAdminCrudDialogComponent.roles;
   form: FormGroup = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.minLength(3)),
     roles: new FormControl('', Validators.required)
   });
-  default_roles = UserCrudDialogComponent.roles.slice(0, 2);
+  default_roles = UserAdminCrudDialogComponent.roles.slice(0, 2);
   destroy = false;
 
-  constructor(public dialogRef: MatDialogRef<UserCrudDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<UserAdminCrudDialogComponent>,
               @Optional() @Inject(MAT_DIALOG_DATA) public data: IUser) {}
 
   ngOnInit() {

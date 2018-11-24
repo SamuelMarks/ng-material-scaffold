@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-
-import { IUser } from '../../../api/user/user.interfaces';
 import { UserService } from '../../../api/user/user.service';
-import { UserCrudDialogComponent } from '../user-crud-dialog/user-crud.dialog.component';
+import { IUser } from '../../../api/user/user.interfaces';
+import { UserAdminCrudDialogComponent } from '../user-admin-crud-dialog/user-admin-crud-dialog.component';
 
 @Component({
-  selector: 'app-users-admin',
-  templateUrl: './users-admin.component.html',
-  styleUrls: ['./users-admin.component.css']
+  selector: 'app-user-admin',
+  templateUrl: './user-admin.component.html',
+  styleUrls: ['./user-admin.component.scss']
 })
-export class UsersAdminComponent implements OnInit {
+export class UserAdminComponent implements OnInit {
   usersDataSource: MatTableDataSource<IUser>;
   displayedColumns = ['email', 'roles', 'createdAt'];
 
@@ -30,7 +29,7 @@ export class UsersAdminComponent implements OnInit {
   openUserCrud(row?: IUser) {
     this
       .dialog
-      .open(UserCrudDialogComponent, { data: row })
+      .open(UserAdminCrudDialogComponent, { data: row })
       .afterClosed()
       .subscribe((data: IUser | boolean) => {
         switch (typeof data) {

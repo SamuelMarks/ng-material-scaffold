@@ -9,6 +9,7 @@ import { SidenavComponent } from './sidenav.component';
 
 
 @NgModule({
+  declarations: [SidenavComponent],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -17,9 +18,8 @@ import { SidenavComponent } from './sidenav.component';
     MatToolbarModule,
     MatSidenavModule,
     RouterModule,
-    ServerStatusModule
+    ServerStatusModule.forRoot()
   ],
-  declarations: [SidenavComponent],
   exports: [SidenavComponent]
 })
-export class SidenavModule { }
+export class SidenavModule {}

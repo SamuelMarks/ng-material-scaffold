@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { Observable } from 'rxjs';
 import { parseDates } from '../shared';
+import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.interfaces';
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
   constructor(private http: HttpClient) {
   }

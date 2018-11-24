@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
 import { AuthService } from '../../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
 import { getRedirectUrl } from '../../app.routes';
+import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
 
 
 @Component({
   selector: 'app-signinup',
   templateUrl: './signinup.component.html',
-  styleUrls: ['./signinup.component.css']
+  styleUrls: ['./signinup.component.scss']
 })
 export class SigninupComponent implements OnInit, AfterViewInit {
   auth = new FormControl();

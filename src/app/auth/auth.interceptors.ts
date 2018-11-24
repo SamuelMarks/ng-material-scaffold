@@ -18,6 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>,
             next: HttpHandler): Observable<HttpEvent<any>> {
+    console.info('AuthInterceptor::intercept');
     return next.handle(AuthService.loggedIn() ?
       req.clone({headers: req.headers.set('X-Access-Token', AuthService.getAccessToken())})
       : req)

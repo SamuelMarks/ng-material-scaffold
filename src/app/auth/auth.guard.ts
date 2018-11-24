@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { URLSearchParams } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
 import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuard implements CanActivate {
   constructor(private router: Router,
               private alertsService: AlertsService) {}
@@ -18,7 +20,17 @@ export class AuthGuard implements CanActivate {
     if (AuthService.loggedIn() && (correctRole == null || correctRole))
       return true;
 
-    const [url /* :string */, qp /*URLSearchParams['paramsMap']*/] = ((question: number): [string, URLSearchParams['paramsMap']] => {
+    // next.queryParams
+
+    console.info('Got here');
+
+    return false;
+
+    // throw TypeError('Implementation in progress');
+
+
+    // const [url /* :string */, qp /*URLSearchParams['paramsMap']*/] = [null, null];
+    /*((question: number): [string, URLSearchParams['paramsMap']] => {
       if (question < 0) return [state.url, new Map<string, string[]>()];
       return [state.url.slice(0, question), new URLSearchParams(state.url.slice(question + 1)).paramsMap];
     })(state.url.indexOf('?'));
@@ -40,5 +52,6 @@ export class AuthGuard implements CanActivate {
       .navigate(['/auth'],
         { queryParams }); // .then(() => {});
     return false;
+  }*/
   }
 }

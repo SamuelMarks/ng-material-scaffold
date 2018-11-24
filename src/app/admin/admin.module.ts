@@ -17,8 +17,8 @@ import { CdkTableModule } from '@angular/cdk/table';
 
 import { UserService } from '../../api/user/user.service';
 import { AlertsService } from '../alerts/alerts.service';
-import { UserCrudDialogComponent } from './user-crud-dialog/user-crud.dialog.component';
-import { UsersAdminComponent } from './users-admin/users-admin.component';
+import { UserAdminCrudDialogComponent } from './user-admin-crud-dialog/user-admin-crud-dialog.component';
+import { UserAdminComponent } from './user-admin/user-admin.component';
 import { AdminComponent } from './admin.component';
 import { adminRoutes } from './admin.routes';
 
@@ -29,8 +29,8 @@ import { adminRoutes } from './admin.routes';
     MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule,
     MatInputModule, MatSelectModule, MatTableModule, MatToolbarModule
   ],
-  declarations: [UserCrudDialogComponent, UsersAdminComponent, AdminComponent],
+  declarations: [UserAdminCrudDialogComponent, UserAdminComponent, AdminComponent],
   providers: [AlertsService, UserService],
-  entryComponents: [UserCrudDialogComponent]
+  entryComponents: [UserAdminCrudDialogComponent]
 })
 export class AdminModule {}

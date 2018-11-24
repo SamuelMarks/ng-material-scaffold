@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
+
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   /** Based on the screen size, switch from standard to one column per row */

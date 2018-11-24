@@ -1,15 +1,12 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ServerStatusService } from './server-status.service';
 
 describe('ServerStatusService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ServerStatusService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([ServerStatusService], (service: ServerStatusService) => {
+  it('should be created', () => {
+    const service: ServerStatusService = TestBed.get(ServerStatusService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

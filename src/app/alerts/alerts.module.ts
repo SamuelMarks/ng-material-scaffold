@@ -10,7 +10,7 @@ import { AlertsService } from './alerts.service';
   imports: [
     CommonModule, MatSnackBarModule
   ],
-  declarations: []
+  providers: [AlertsService]
 })
 export class AlertsModule {
   public static forRoot(): ModuleWithProviders {

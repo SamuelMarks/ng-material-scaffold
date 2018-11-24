@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 
 import { TAlert } from './alerts.types';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AlertsService {
   alerts: string[];
 

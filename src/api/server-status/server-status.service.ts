@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
-
 import { IServerStatus } from './server-status.interfaces';
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ServerStatusService {
   constructor(private http: HttpClient) { }
 
