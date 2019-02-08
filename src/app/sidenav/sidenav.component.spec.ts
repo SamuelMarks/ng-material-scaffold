@@ -11,7 +11,7 @@ describe('SidenavComponent', () => {
       imports: [MatSidenavModule],
       declarations: [SidenavComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SidenavComponent);
     component = fixture.componentInstance;

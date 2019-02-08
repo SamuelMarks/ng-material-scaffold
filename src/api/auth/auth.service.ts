@@ -59,15 +59,19 @@ export class AuthService {
   }
 
   public signinup(user: IAuthReq): Observable<IAuthReq | ILoginResp> {
+
+
     return (this.login(user) as Observable<ILoginResp>)
       .pipe(
-        catchError((err: HttpErrorResponse) =>
-          err && err.error && err.error.error_message && err.error.error_message === 'User not found' ?
-            this.register(user)
-              .pipe(
-                map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }))
-              )
-            : this.alertsService.add(err.error.error_message) || throwError(err.error)
+        catchError((err: HttpErrorResponse) => {
+            if (err && err.error && err.error.error_message && err.error.error_message === 'User not found')
+              return this.register(user)
+                .pipe(
+                  map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }) as IAuthReq | ILoginResp)
+                );
+            // tslint:disable:no-unused-expression
+            this.alertsService.add(err.error.error_message) === void 0 as any || throwError(err.error);
+          }
         )
       );
   }

@@ -3,12 +3,12 @@
 
   <span class="example-fill-remaining-space"></span>
 
-  <button mat-icon-button (click)="openUserCrud()">
+  <button (click)="openUserCrud()" mat-icon-button>
     <mat-icon>add_circle</mat-icon>
   </button>
   <span class="example-fill-remaining-space"></span>
   <mat-form-field floatPlaceholder="never">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input (keyup)="applyFilter($event.target.value)" matInput placeholder="Filter">
   </mat-form-field>
 </mat-toolbar>
 

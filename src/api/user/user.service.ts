@@ -38,7 +38,7 @@ export class UserService {
 
   getAll(): Observable<IUser[]> {
     return this.http
-      .get<{ users: IUser[] }>('/api/users')
+      .get<{users: IUser[]}>('/api/users')
       .pipe(
         map(users => users.users.sort((a, b) => a.email.localeCompare(b.email))), // TODO: sort server-side
         map(users => users.map(parseDates))
