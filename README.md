@@ -10,7 +10,7 @@ Simple scaffold generated with `@angular/cli` then implemented manually.
 ## Deploy distribution
 Clone [ng-material-scaffold-dist](https://github.com/SamuelMarks/ng-material-scaffold-dist) one directory above, then:
 
-    rm -rf dist; ng build -prod && d=../ng-material-scaffold-dist && rm -rf "$d/dist" && mv "$PWD/dist" "$d" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
+    rm -rf dist; ng build --prod && d=../ng-material-scaffold-dist && rm -rf "$d/dist" && mv "$PWD/dist/${PWD##*/}/" "$d/dist" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
 
 ---
 
