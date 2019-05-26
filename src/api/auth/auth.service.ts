@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 
@@ -55,7 +55,17 @@ export class AuthService {
 
   public register(user: IAuthReq): Observable<HttpResponse<IAuthReq>> {
     localStorage.setItem('user', user.email);
-    return this.http.post<IAuthReq>('/api/user', user, { observe: 'response' });
+    return this.http.post<IAuthReq>('/api/user', user, { observe: 'response' })
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+            if (err && err.error)
+              if (err.error.error_message)
+                this.alertsService.add(err.error.error_message);
+              else throwError(err.error);
+            return of({} as HttpResponse<IAuthReq>);
+          }
+        )
+      );
   }
 
   public signinup(user: IAuthReq): Observable<IAuthReq | ILoginResp> {

@@ -1,6 +1,6 @@
 {
   "name": "ng-material-scaffold",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Simple scaffold generated with `@angular/cli` then implemented manually.",
   "author": "Samuel Marks <samuel@offscale.io>",
   "repository": {
