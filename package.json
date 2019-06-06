@@ -2,6 +2,7 @@
   "name": "ng-material-scaffold",
   "version": "0.0.15",
   "description": "Simple scaffold generated with `@angular/cli` then implemented manually.",
+  "license": "(MIT OR Apache-2.0)",
   "author": "Samuel Marks <samuel@offscale.io>",
   "repository": {
     "url": "https://github.com/SamuelMarks/ng-material-scaffold"
