@@ -1,13 +1,21 @@
 {
   "name": "ng-material-scaffold",
   "version": "0.0.16",
-  "private": true,
   "description": "Simple scaffold generated with `@angular/cli` then implemented manually.",
-  "repository": {
-    "url": "https://github.com/SamuelMarks/ng-material-scaffold"
-  },
+  "keywords": [
+    "angular",
+    "angular-material",
+    "@angular",
+    "@angular/material"
+  ],
+  "homepage": "https://github.com/SamuelMarks/ng-material-scaffold#readme",
+  "bugs": "https://github.com/SamuelMarks/ng-material-scaffold/issues",
   "license": "(Apache-2.0 OR MIT)",
   "author": "Samuel Marks @SamuelMarks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SamuelMarks/ng-material-scaffold"
+  },
   "scripts": {
     "build": "ng build",
     "e2e": "ng e2e",
