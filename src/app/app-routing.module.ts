@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './auth/auth.guard';
 
 
 const routes: Routes = [
-  { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-  { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
   {
-    path: 'admin', loadChildren: './admin/admin.module#AdminModule',
-    canActivate: [AuthGuard], data: { role: ['admin'] }
+    path: '',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
-    path: 'secret-dashboard', loadChildren: './secret-dashboard/secret-dashboard.module#SecretDashboardModule',
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard],
+    data: { role: ['admin'] }
+  },
+  {
+    path: 'secret-dashboard',
+    loadChildren: () => import('./secret-dashboard/secret-dashboard.module').then(m => m.SecretDashboardModule),
     canActivate: [AuthGuard]
   }
 ];
@@ -23,4 +32,4 @@ export const getRedirectUrl = (url: string): string | null => new URLSearchParam
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
