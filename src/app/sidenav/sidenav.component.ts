@@ -2,7 +2,7 @@ import { AfterContentInit, Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
