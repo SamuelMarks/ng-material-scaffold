@@ -1,7 +1,7 @@
 ng-material-scaffold
 ====================
 [![License](https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Build Status](https://travis-ci.org/SamuelMarks/ng-material-scaffold.svg?branch=master)](https://travis-ci.org/SamuelMarks/ng-material-scaffold)
+![Node.js CI](https://github.com/SamuelMarks/ng-material-scaffold/workflows/Node.js%20CI/badge.svg)
 [![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/SamuelMarks/ng-material-scaffold.svg)](https://libraries.io/github/SamuelMarks/ng-material-scaffold)
 
 Simple scaffold generated with `@angular/cli` then implemented manually.
