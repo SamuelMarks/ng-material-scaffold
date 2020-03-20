@@ -36,12 +36,9 @@ export class AlertsService {
           if (alert instanceof HttpErrorResponse || ['status', 'statusText'].every(alert.hasOwnProperty))
             return toKnownElse((alert as HttpErrorResponse).status, (alert as HttpErrorResponse).statusText);
           else if (alert instanceof Error) return toKnownElse(alert.message);
-          else if (alert.hasOwnProperty('status'))
-            if ((alert as unknown as {status: number}).status === 500)
-              return 'Internal Server Error; check server logs';
-          return objToStr(alert);
-
+          else return objToStr(alert);
         default:
+          console.error(alert);
           return 'undefined alert';
       }
     })();
