@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Angular builds
 
 on: [push]
 
