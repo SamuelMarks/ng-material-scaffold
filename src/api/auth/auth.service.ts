@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs/internal/observable/throwError';
 
 import { AlertsService } from '../../app/alerts/alerts.service';
 import { IAuthReq, ILoginResp } from './auth.interfaces';
@@ -12,14 +11,14 @@ import { IAuthReq, ILoginResp } from './auth.interfaces';
 
 @Injectable()
 export class AuthService {
-  public access_token: string;
+  public accessToken: string;
   public loggedIn = AuthService.loggedIn;
 
   constructor(private http: HttpClient,
               private router: Router,
               private alertsService: AlertsService) {
     const at = localStorage.getItem('access-token');
-    if (at != null) this.access_token = at;
+    if (at != null) this.accessToken = at;
   }
 
   static getAccessToken(): string {
@@ -42,9 +41,9 @@ export class AuthService {
       .navigate(['/'], this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } });
   }
 
-  _login(login_resp: ILoginResp) {
-    this.access_token = login_resp.access_token;
-    localStorage.setItem('access-token', this.access_token);
+  _login(loginResp: ILoginResp) {
+    this.accessToken = loginResp.access_token;
+    localStorage.setItem('access-token', this.accessToken);
   }
 
   public login(user: IAuthReq): Observable<ILoginResp> | /*ObservableInput<{}> |*/ void {
