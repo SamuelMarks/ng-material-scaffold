@@ -15,18 +15,23 @@ export class AlertsService {
   public add(alert: string | TAlert | Error, action?: string | false, config?: MatSnackBarConfig): void {
     if (alert == null) return;
 
-    const objToStr = (obj: object): string => Object
+    const objToStr = (obj: {[key: string]: any}): string => Object
       .keys(obj)
       .map(k => obj[k])
       .join('\t');
 
-    const toKnownElse = ((k: string | number, els?: string): string => {
-      const known = {
+    const toKnownElse = (k: string | number, els?: string): string => {
+      const message: string = 'API server not available';
+      let known: Set<string|number> = new Set();
+      known.add(504);
+      known.add('Gateway Timeout');
+
+      /*const known: {[key: string]: string} &  {[key: number]: string} | {[key: string]: string} | {[key: number]: string} = {
         'Gateway Timeout': 'API server not available',
         504: 'API server not available'
-      };
-      return known[k] == null ? (els == null ? k : els) : known[k];
-    });
+      };*/
+      return known.has(k) ? (els == null ? k.toString() : els) : message;
+    };
 
     const alertMessage: string = ((): string => {
       switch (typeof alert) {

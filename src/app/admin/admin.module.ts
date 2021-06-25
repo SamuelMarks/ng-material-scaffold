@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CdkTableModule } from '@angular/cdk/table';
 
-import { UserService } from '../../api/user/user.service';
+import { UserService } from '../api/user/user.service';
 import { AlertsService } from '../alerts/alerts.service';
 import { UserCrudDialogComponent } from './user-crud-dialog/user-crud.dialog.component';
 import { UsersAdminComponent } from './users-admin/users-admin.component';

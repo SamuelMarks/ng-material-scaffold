@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { AuthService } from '../../api/auth/auth.service';
+import { AuthService } from '../api/auth/auth.service';
 
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';

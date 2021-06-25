@@ -2,10 +2,10 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
-import { AuthService } from '../../../api/auth/auth.service';
+import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
+import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
-import { getRedirectUrl } from '../../app-routing.module';
+import {getRedirectUrl} from "../../app-routing.module";
 
 
 @Component({
@@ -15,7 +15,7 @@ import { getRedirectUrl } from '../../app-routing.module';
 })
 export class SigninupComponent implements OnInit, AfterViewInit {
   auth = new FormControl();
-  form: FormGroup;
+  form: FormGroup | undefined;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -37,16 +37,17 @@ export class SigninupComponent implements OnInit, AfterViewInit {
   }
 
   signInUp() {
-    this.authService
-      .signinup(this.form.value as IAuthReq)
-      .subscribe((user: IAuthReq | ILoginResp) => {
-          if (user.hasOwnProperty('access_token')) {
-            this.authService._login(user as ILoginResp);
-            this.router.navigateByUrl(getRedirectUrl(location.href) || '/secret-dashboard')
-              .then(() => {})
-              .catch(console.error);
-          } else this.alertsService.add(`Unexpected: ${JSON.stringify(user)};`);
-        }
-      );
+    if (this.form != null)
+      this.authService
+        .signinup(this.form.value as IAuthReq)
+        .subscribe((user: IAuthReq | ILoginResp) => {
+            if (user.hasOwnProperty('access_token')) {
+              this.authService._login(user as ILoginResp);
+              this.router.navigateByUrl(getRedirectUrl(location.href) || '/secret-dashboard')
+                .then(() => {})
+                .catch(console.error);
+            } else this.alertsService.add(`Unexpected: ${JSON.stringify(user)};`);
+          }
+        );
   }
 }

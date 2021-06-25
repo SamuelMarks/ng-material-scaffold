@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { AuthService } from '../../api/auth/auth.service';
+import { AuthService } from '../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
 
 
@@ -18,7 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>,
             next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(AuthService.loggedIn() ?
-      req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()) })
+      req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()!) })
       : req)
       .pipe(
         catchError((err: any, caught) => {

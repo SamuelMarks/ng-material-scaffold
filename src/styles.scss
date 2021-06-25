@@ -1,7 +1,7 @@
-@use '~@angular/material' as mat;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+@use '~@angular/material' as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -18,11 +18,26 @@ $ng-material-scaffold-accent: mat.define-palette(mat.$pink-palette, A200, A100, 
 // The warn palette is optional (defaults to red).
 $ng-material-scaffold-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$ng-material-scaffold-theme: mat.define-light-theme($ng-material-scaffold-primary, $ng-material-scaffold-accent, $ng-material-scaffold-warn);
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ng-material-scaffold-theme: mat.define-light-theme((
+  color: (
+    primary: $ng-material-scaffold-primary,
+    accent: $ng-material-scaffold-accent,
+    warn: $ng-material-scaffold-warn,
+  )
+));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($ng-material-scaffold-theme);
 
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f9f9f9;
+}

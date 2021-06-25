@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { ServerStatusService } from '../../api/server-status/server-status.service';
-import { IServerStatus } from '../../api/server-status/server-status.interfaces';
 import { AlertsService } from '../alerts/alerts.service';
+import {IServerStatus} from "../api/server-status/server-status.interfaces";
+import {ServerStatusService} from "../api/server-status/server-status.service";
 
 
 @Component({
@@ -18,7 +18,7 @@ export class ServerStatusComponent implements OnInit {
               private alertsService: AlertsService) {}
 
   ngOnInit() {
-    this.serverStatus = { version: '@ 0.0.32; ' };
+    this.serverStatus = { version: '@ 0.0.33-alpha; ' };
     this.serverStatusService
       .get()
       .subscribe(

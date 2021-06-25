@@ -7,7 +7,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthService } from '../../api/auth/auth.service';
+import { AuthService } from '../api/auth/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -21,8 +21,8 @@ export class SidenavComponent implements AfterContentInit {
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
-  @Input() openedSubject: Subject<boolean>;
-  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
+  @Input() openedSubject: Subject<boolean> | undefined;
+  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav | undefined;
 
   constructor(private breakpointObserver: BreakpointObserver,
               private router: Router) {
@@ -31,13 +31,16 @@ export class SidenavComponent implements AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.openedSubject.subscribe(
-      open => this.sidenav[open ? 'open' : 'close']()
-    );
-    this.router.events.subscribe(() => this.openedSubject.next(false));
+    if (this.openedSubject != null && this.sidenav != null) {
+      this.openedSubject.subscribe(
+        open => this.sidenav![open ? 'open' : 'close']()
+      );
+      this.router.events.subscribe(() => this.openedSubject!.next(false));
+    }
   }
 
   toggle() {
-    this.openedSubject.next(!this.sidenav.opened);
+    if (this.openedSubject != null && this.sidenav != null)
+      this.openedSubject.next(!this.sidenav.opened);
   }
 }

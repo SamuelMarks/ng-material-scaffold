@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { AlertsService } from '../../app/alerts/alerts.service';
+import {AlertsService} from "../../alerts/alerts.service";
 import { IAuthReq, ILoginResp } from './auth.interfaces';
 
 
 @Injectable()
 export class AuthService {
-  public accessToken: string;
+  public accessToken: string | undefined;
   public loggedIn = AuthService.loggedIn;
 
   constructor(private http: HttpClient,
@@ -21,7 +21,7 @@ export class AuthService {
     if (at != null) this.accessToken = at;
   }
 
-  static getAccessToken(): string {
+  static getAccessToken(): string | null {
     return localStorage.getItem('access-token');
   }
 
@@ -38,7 +38,8 @@ export class AuthService {
     localStorage.removeItem('access-token');
     localStorage.removeItem('user');
     this.router
-      .navigate(['/'], this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } });
+      .navigate(['/'], this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } })
+      .catch(console.error);
   }
 
   _login(loginResp: ILoginResp) {
@@ -72,14 +73,16 @@ export class AuthService {
 
     return (this.login(user) as Observable<ILoginResp>)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
+        catchError((err: any, caught: Observable<ILoginResp>): Observable<IAuthReq | ILoginResp> =>  {
             if (err && err.error && err.error.error_message && err.error.error_message === 'User not found')
               return this.register(user)
                 .pipe(
                   map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }) as IAuthReq | ILoginResp)
                 );
             // tslint:disable:no-unused-expression
-            this.alertsService.add(err.error.error_message) === void 0 as any || throwError(err.error);
+            if (typeof this.alertsService.add(err.error.error_message) !== "undefined")
+              throwError(err.error);
+            return new Observable();
           }
         )
       );

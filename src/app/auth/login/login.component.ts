@@ -4,8 +4,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Observable } from 'rxjs';
 
-import { AuthService } from '../../../api/auth/auth.service';
-import { IAuthReq, ILoginResp } from '../../../api/auth/auth.interfaces';
+import { AuthService } from '../../api/auth/auth.service';
+import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
 import { AlertsService } from '../../alerts/alerts.service';
 
 
@@ -16,7 +16,7 @@ import { AlertsService } from '../../alerts/alerts.service';
 })
 export class LoginComponent implements OnInit {
   auth = new FormControl();
-  form: FormGroup;
+  form: FormGroup | undefined;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -31,21 +31,22 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    (this.authService
-      .login(this.form.value as IAuthReq) as Observable<ILoginResp>)
-      .subscribe((user: ILoginResp) => {
-          if (user.access_token == null) {
-            this.alertsService.add('No access token; try logging in again');
-            return;
+    if (this.form != null)
+      (this.authService
+        .login(this.form.value as IAuthReq) as Observable<ILoginResp>)
+        .subscribe((user: ILoginResp) => {
+            if (user.access_token == null) {
+              this.alertsService.add('No access token; try logging in again');
+              return;
+            }
+
+            this.authService.accessToken = user.access_token;
+            localStorage.setItem('access-token', this.authService.accessToken);
+
+            this.router
+              .navigate(['/secret-dashboard'])
+              .then(() => {});
           }
-
-          this.authService.accessToken = user.access_token;
-          localStorage.setItem('access-token', this.authService.accessToken);
-
-          this.router
-            .navigate(['/secret-dashboard'])
-            .then(() => {});
-        }
-      );
+        );
   }
 }
