@@ -1,4 +1,4 @@
-<form (ngSubmit)="closeDialog()" [formGroup]="form">
+<form (ngSubmit)="closeDialog()" [formGroup]="form" *ngIf="form != null">
   <mat-form-field *ngIf="!data || !data.email">
     <input formControlName="email" matInput placeholder="Email" required type="email">
   </mat-form-field>

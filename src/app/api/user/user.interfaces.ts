@@ -1,7 +1,10 @@
-export interface IUser {
+interface IUserDateType<T> {
   email: string;
   roles: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: T;
+  updatedAt: T;
 }
+
+export type IUser = IUserDateType<Date>;
+export type IUserStringDates = IUserDateType<string>;

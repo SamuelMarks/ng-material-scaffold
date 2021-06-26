@@ -1,6 +1,6 @@
 {
   "name": "ng-material-scaffold",
-  "version": "0.0.33-alpha",
+  "version": "0.0.33",
   "description": "Simple scaffold generated with `@angular/cli` then implemented manually.",
   "keywords": [
     "angular",

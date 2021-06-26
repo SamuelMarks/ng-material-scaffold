@@ -24,8 +24,11 @@ export class UsersAdminComponent implements OnInit {
       .subscribe((users: IUser[]) => this.usersDataSource = new MatTableDataSource(users.sort()));
   }
 
-  applyFilter(filterValue: string) {
-    if (this.usersDataSource != null)
+  applyFilter(filterTarget: EventTarget | null) {
+    const filterValue: string | null = filterTarget != null && filterTarget.hasOwnProperty("value") ?
+      (filterTarget as EventTarget & {value: string})["value"]
+      : null;
+    if (this.usersDataSource != null  && filterValue != null)
       this.usersDataSource.filter = filterValue.trim().toLowerCase();
   }
 

@@ -8,11 +8,11 @@
   </button>
   <span class="example-fill-remaining-space"></span>
   <mat-form-field floatPlaceholder="never">
-    <input (keyup)="applyFilter($event.target.value)" matInput placeholder="Filter">
+    <input (keyup)="applyFilter($event.target)" matInput placeholder="Filter">
   </mat-form-field>
 </mat-toolbar>
 
-<mat-table #table [dataSource]="usersDataSource">
+<mat-table #table [dataSource]="usersDataSource" *ngIf="usersDataSource != null">
   <ng-container matColumnDef="email">
     <mat-header-cell *cdkHeaderCellDef> Email</mat-header-cell>
     <mat-cell *cdkCellDef="let element">

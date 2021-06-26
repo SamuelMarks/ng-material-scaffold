@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { parseDates } from '../shared';
-import { IUser } from './user.interfaces';
+import { IUser, IUserStringDates } from './user.interfaces';
 
 
 @Injectable()
@@ -15,19 +15,19 @@ export class UserService {
 
   create(user: IUser): Observable<IUser> {
     return this.http
-      .post<IUser>('/api/user', user)
+      .post<IUserStringDates>('/api/user', user)
       .pipe(map(parseDates));
   }
 
   read(user_id?: string): Observable<IUser> {
     return this.http
-      .get<IUser>(`/api/user${user_id == null ? '' : '/' + user_id}`)
+      .get<IUserStringDates>(`/api/user${user_id == null ? '' : '/' + user_id}`)
       .pipe(map(parseDates));
   }
 
   update(user: IUser, user_id?: string): Observable<IUser> {
     return this.http
-      .put<IUser>(`/api/user${user_id == null ? '' : '/' + user_id}`, user)
+      .put<IUserStringDates>(`/api/user${user_id == null ? '' : '/' + user_id}`, user)
       .pipe(map(parseDates));
   }
 
@@ -38,7 +38,7 @@ export class UserService {
 
   getAll(): Observable<IUser[]> {
     return this.http
-      .get<{users: IUser[]}>('/api/users')
+      .get<{users: IUserStringDates[]}>('/api/users')
       .pipe(
         map(users => users.users.sort((a, b) => a.email.localeCompare(b.email))), // TODO: sort server-side
         map(users => users.map(parseDates))
