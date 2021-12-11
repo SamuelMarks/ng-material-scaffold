@@ -21,14 +21,13 @@ import { AdminComponent } from './admin.component';
 import { adminRoutes } from './admin.routes';
 
 @NgModule({
-  imports: [
-    CommonModule, CdkTableModule, MatTableModule, FormsModule,
-    ReactiveFormsModule, RouterModule, RouterModule.forChild(adminRoutes),
-    MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule,
-    MatInputModule, MatSelectModule, MatTableModule, MatToolbarModule
-  ],
-  declarations: [UserCrudDialogComponent, UsersAdminComponent, AdminComponent],
-  providers: [AlertsService, UserService],
-  entryComponents: [UserCrudDialogComponent]
+    imports: [
+        CommonModule, CdkTableModule, MatTableModule, FormsModule,
+        ReactiveFormsModule, RouterModule, RouterModule.forChild(adminRoutes),
+        MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule,
+        MatInputModule, MatSelectModule, MatTableModule, MatToolbarModule
+    ],
+    declarations: [UserCrudDialogComponent, UsersAdminComponent, AdminComponent],
+    providers: [AlertsService, UserService]
 })
 export class AdminModule {}
