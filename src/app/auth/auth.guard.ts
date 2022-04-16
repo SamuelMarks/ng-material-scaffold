@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    const correctRole = next.data && next.data.role ? AuthService.hasRole(next.data.role) : null;
+    const correctRole = next.data && next.data["role"] ? AuthService.hasRole(next.data["role"]) : null;
     if (AuthService.loggedIn() && (correctRole == null || correctRole))
       return true;
 
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       return [state.url.slice(0, question), new URLSearchParams(state.url.slice(question + 1))];
     })(state.url.indexOf('?'));
 
-    const msg = `${correctRole != null ? 'Only ' + next.data.role + ' can' : 'Auth required to'} view ${url}`;
+    const msg = `${correctRole != null ? 'Only ' + next.data["role"] + ' can' : 'Auth required to'} view ${url}`;
 
     this.alertsService.add(msg);
     console.error(msg);
