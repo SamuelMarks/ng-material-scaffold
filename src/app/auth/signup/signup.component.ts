@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 
@@ -13,11 +13,11 @@ import { AlertsService } from '../../alerts/alerts.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  auth = new FormControl();
-  form: FormGroup | undefined;
+  auth = new UntypedFormControl();
+  form: UntypedFormGroup | undefined;
 
   constructor(private router: Router,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               public authService: AuthService,
               private alertsService: AlertsService) { }
 

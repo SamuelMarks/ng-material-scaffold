@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {IUser} from "../../api/user/user.interfaces";
@@ -13,10 +13,10 @@ import {IUser} from "../../api/user/user.interfaces";
 export class UserCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];
   roles = UserCrudDialogComponent.roles;
-  form: FormGroup = new FormGroup({
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.minLength(3)),
-    roles: new FormControl('', Validators.required)
+  form: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl('', Validators.required),
+    password: new UntypedFormControl('', Validators.minLength(3)),
+    roles: new UntypedFormControl('', Validators.required)
   });
   default_roles = UserCrudDialogComponent.roles.slice(0, 2);
   destroy = false;

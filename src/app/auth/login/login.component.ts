@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
@@ -15,11 +15,11 @@ import { AlertsService } from '../../alerts/alerts.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  auth = new FormControl();
-  form: FormGroup | undefined;
+  auth = new UntypedFormControl();
+  form: UntypedFormGroup | undefined;
 
   constructor(private router: Router,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               public authService: AuthService,
               private alertsService: AlertsService) { }
 

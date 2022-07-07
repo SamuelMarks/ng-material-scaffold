@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
 import { AuthService } from '../../api/auth/auth.service';
@@ -14,11 +14,11 @@ import {getRedirectUrl} from "../../app-routing.module";
   styleUrls: ['./signinup.component.css']
 })
 export class SigninupComponent implements OnInit, AfterViewInit {
-  auth = new FormControl();
-  form: FormGroup | undefined;
+  auth = new UntypedFormControl();
+  form: UntypedFormGroup | undefined;
 
   constructor(private router: Router,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               public authService: AuthService,
               private alertsService: AlertsService) {}
 
