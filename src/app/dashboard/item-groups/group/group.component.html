@@ -3,7 +3,7 @@
   id="{{ group.name }}"
   [dataSource]="tableDataSource"
   cdkDropList
-  (cdkDropListData)="(tableDataSource)"
+  [cdkDropListData]="tableDataSource.data"
   (cdkDropListDropped)="drop($event)"
 >
   <ng-container matColumnDef="createdAt">

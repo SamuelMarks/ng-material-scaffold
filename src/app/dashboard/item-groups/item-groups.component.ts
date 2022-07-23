@@ -5,7 +5,13 @@ import { IGroup, IItem } from '../model';
 const GROUPS = [
   <IGroup>{
     name: 'FIRST GROUP',
-    groupItems: [],
+    groupItems: [
+      <IItem>{
+        createdAt: new Date(),
+        name: 'FIRST GROUP ITEM',
+        number: 122,
+      },
+    ],
   },
   <IGroup>{
     name: 'SECOND GROUP',

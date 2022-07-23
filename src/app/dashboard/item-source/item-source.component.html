@@ -1,10 +1,10 @@
 <h3>ITEMS SOURCE</h3>
 <mat-table
   class="layout-table"
-  #table
+  #itemSourceTable
   [dataSource]="tableDataSource"
   cdkDropList
-  cdkDropListData="tableDataSource"
+  [cdkDropListData]="tableDataSource.data"
   (cdkDropListDropped)="drop($event)"
   [cdkDropListDisabled]="dragDisabled"
 >
@@ -25,7 +25,7 @@
     </mat-header-cell>
     <mat-cell *matCellDef="let row">
       <mat-checkbox
-        class="dragCursor"
+        [class.drag-cursor]="selection.isSelected(row)"
         (click)="$event.stopPropagation()"
         (change)="$event ? selection.toggle(row) : null"
         [checked]="selection.isSelected(row)"
@@ -57,13 +57,21 @@
   <mat-row
     *matRowDef="let row; columns: displayedColumns"
     [class.selected]="selection.isSelected(row)"
+    [cdkDragDisabled]="!selection.isSelected(row)"
     cdkDrag
     [cdkDragData]="selection.selected"
+    (cdkDragStarted)="onDragStarted($event, row)"
   >
-    <span
+    <div
       *cdkDragPreview
       [matBadge]="selection.selected.length || 1"
       matBadgeOverlap="false"
-    ></span>
+    >
+      <tr
+        style="width: 200px; height: 100px"
+        mat-row
+        *ngFor="let item of selection.selected"
+      ></tr>
+    </div>
   </mat-row>
 </mat-table>

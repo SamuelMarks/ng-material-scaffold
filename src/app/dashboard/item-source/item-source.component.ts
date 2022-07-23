@@ -1,7 +1,12 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  CdkDragDrop,
+  CdkDragStart,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 import { IItem } from '../model';
 
 const ITEMS = [
@@ -29,13 +34,14 @@ const ITEMS = [
 })
 export class ItemSourceComponent implements OnInit {
   // @Input() items: IItem[] = [];
-  @ViewChild('table', { static: true }) table!: MatTable<IItem>;
+  @ViewChild('itemSourceTable', { static: true }) table!: MatTable<IItem>;
 
   tableDataSource: MatTableDataSource<IItem> = new MatTableDataSource<IItem>();
   displayedColumns = ['select', 'createdAt', 'number', 'name'];
   selection = new SelectionModel<IItem>(true, []);
   dragging: boolean = false;
   dragDisabled = false;
+  dropSubs!: Subscription;
 
   constructor() {}
 
@@ -43,64 +49,39 @@ export class ItemSourceComponent implements OnInit {
     this.tableDataSource.data = ITEMS;
   }
 
-  public drop($event: CdkDragDrop<string, IItem, any>) {
+  public drop($event: CdkDragDrop<IItem[], IItem[], IItem[]>) {
     console.log($event.container.id);
+    console.log($event.container.data);
     console.log($event.previousContainer.id);
-    console.log($event);
+    console.log($event.previousContainer.data);
     //this.dragDisabled = true;
 
-    // const previousIndex = this.tableDataSource.data.findIndex(
-    //   (d) => d === $event.item.data
-    // );
-
-    // moveItemInArray(
-    //   this.tableDataSource.data,
-    //   previousIndex,
-    //   $event.currentIndex
-    // );
-    // this.table.renderRows();
-
-    // const selections = [];
-
-    // Get the indexes for all selected items
-    // _.each(this.items, (item, i) => {
-    //   if (item.selected) {
-    //     selections.push(i);
-    //   }
-    // });
-
-    // if (this.selections.length > 1) {
-    //   // If multiple selections exist
-    //   let newIndex = event.currentIndex;
-    //   let indexCounted = false;
-
-    //   // create an array of the selected items
-    //   // set newCurrentIndex to currentIndex - (any items before that index)
-    //   this.selections = _.sortBy(this.selections, (s) => s);
-    //   const selectedItems = _.map(this.selections, (s) => {
-    //     if (s < event.currentIndex) {
-    //       newIndex--;
-    //       indexCounted = true;
-    //     }
-    //     return this.items[s];
-    //   });
-
-    //   // correct the index
-    //   if (indexCounted) {
-    //     newIndex++;
-    //   }
-
-    //   // remove selected items
-    //   this.items = _.without(this.items, ...selectedItems);
-
-    //   // add selected items at new index
-    //   this.items.splice(newIndex, 0, ...selectedItems);
-    // } else {
-    //   // If a single selection
-    //   moveItemInArray(this.items, event.previousIndex, event.currentIndex);
-    // }
+    transferArrayItem(
+      $event.previousContainer.data,
+      $event.container.data,
+      $event.previousIndex,
+      $event.currentIndex
+    );
 
     // this.dragging = false;
+  }
+
+  onDragEnded($event: any, dragged: IItem) {
+    console.log('element drag ended');
+    console.log($event);
+  }
+
+  onDragStarted($event: CdkDragStart<IItem[]>, dragged: IItem) {
+    const allItems = this.tableDataSource.data;
+    this.dropSubs = $event.source.dropped.subscribe(
+      (dropped: CdkDragDrop<IItem[], IItem[], IItem[]>) => {
+        const tmp = allItems.filter(
+          (itm) => dropped.item.data.indexOf(itm) == -1
+        );
+        this.tableDataSource.data = tmp;
+        this.selection.clear();
+      }
+    );
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -109,9 +90,10 @@ export class ItemSourceComponent implements OnInit {
     const numRows = this.tableDataSource.data.length;
     return numSelected === numRows;
   }
+
   isSelectedPage() {
     const numSelected = this.selection.selected.length;
-    const page = this.tableDataSource.paginator!.page;
+    //const page = this.tableDataSource.paginator!.page;
     let endIndex: number;
     // First check whether data source length is greater than current page index multiply by page size.
     // If yes then endIdex will be current page index multiply by page size.
@@ -141,6 +123,7 @@ export class ItemSourceComponent implements OnInit {
       ? this.selection.clear()
       : this.tableDataSource.data.forEach((row) => this.selection.select(row));
   }
+
   selectRows() {
     // tslint:disable-next-line:max-line-length
     let endIndex: number;
