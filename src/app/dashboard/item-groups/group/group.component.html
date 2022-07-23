@@ -1,0 +1,38 @@
+<h4>{{ group.name }}</h4>
+<mat-table
+  id="{{ group.name }}"
+  [dataSource]="tableDataSource"
+  cdkDropList
+  (cdkDropListData)="(tableDataSource)"
+  (cdkDropListDropped)="drop($event)"
+>
+  <ng-container matColumnDef="createdAt">
+    <mat-header-cell *matHeaderCellDef>CREATED AT</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.createdAt | date: "HH:mm:ss" }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="number">
+    <mat-header-cell *matHeaderCellDef>NUMBER</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.number }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>NAME</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    cdkDrag
+    [cdkDragDisabled]="false"
+    [cdkDragData]="row"
+    ><span *cdkDragPreview matBadge="1" matBadgeSize="large"
+      >Text with large badge</span
+    >
+  </mat-row>
+</mat-table>
