@@ -11,12 +11,14 @@
       <app-server-status></app-server-status>
     </mat-toolbar>
     <mat-nav-list>
-      <!-- <a *ngIf="!loggedIn()" mat-list-item routerLink="/auth">Auth</a> -->
+      <a *ngIf="!loggedIn()" mat-list-item routerLink="/auth">Auth</a>
       <a *ngIf="hasRole('admin')" mat-list-item routerLink="/admin">Admin</a>
       <ng-container *ngIf="loggedIn()">
         <a mat-list-item routerLink="/secret-dashboard">Secret dashboard</a>
         <a mat-list-item routerLink="/auth/logout">Logout</a>
       </ng-container>
+      <a mat-list-item routerLink="/dragndrop">Drag'n'Drop</a>
+
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
