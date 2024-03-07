@@ -12,4 +12,5 @@ import { secretDashboardRoutes } from './secret-dashboard.routes';
   ],
   declarations: [SecretDashboardComponent]
 })
-export class SecretDashboardModule {}
+export class SecretDashboardModule {
+}

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import {IUser} from "../../api/user/user.interfaces";
+import { IUser } from "../../api/user/user.interfaces";
 
 
 @Component({
@@ -22,7 +22,8 @@ export class UserCrudDialogComponent implements OnInit {
   destroy = false;
 
   constructor(public dialogRef: MatDialogRef<UserCrudDialogComponent>,
-              @Optional() @Inject(MAT_DIALOG_DATA) public data: IUser) {}
+              @Optional() @Inject(MAT_DIALOG_DATA) public data: IUser) {
+  }
 
   ngOnInit() {
     if (this.data === null)

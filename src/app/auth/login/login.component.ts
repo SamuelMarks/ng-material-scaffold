@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,
               private fb: UntypedFormBuilder,
               public authService: AuthService,
-              private alertsService: AlertsService) { }
+              private alertsService: AlertsService) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -45,7 +46,8 @@ export class LoginComponent implements OnInit {
 
             this.router
               .navigate(['/secret-dashboard'])
-              .then(() => {});
+              .then(() => {
+              });
           }
         );
   }

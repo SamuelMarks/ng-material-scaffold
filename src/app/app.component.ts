@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Subject} from "rxjs";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -11,4 +11,5 @@ export class AppComponent {
 
   dismissSidebar() {
     this.openedSubject.next(false);
-  }}
+  }
+}

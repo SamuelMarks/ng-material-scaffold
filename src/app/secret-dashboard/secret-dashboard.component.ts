@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SecretDashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

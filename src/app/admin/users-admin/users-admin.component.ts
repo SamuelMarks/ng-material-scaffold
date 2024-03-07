@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
-import {IUser} from "../../api/user/user.interfaces";
-import {UserService} from "../../api/user/user.service";
+import { IUser } from "../../api/user/user.interfaces";
+import { UserService } from "../../api/user/user.service";
 import { UserCrudDialogComponent } from '../user-crud-dialog/user-crud.dialog.component';
 
 @Component({
@@ -16,7 +16,8 @@ export class UsersAdminComponent implements OnInit {
   displayedColumns = ['email', 'roles', 'createdAt'];
 
   constructor(public dialog: MatDialog,
-              private userService: UserService) { }
+              private userService: UserService) {
+  }
 
   ngOnInit() {
     this.userService
@@ -26,9 +27,9 @@ export class UsersAdminComponent implements OnInit {
 
   applyFilter(filterTarget: EventTarget | null) {
     const filterValue: string | null = filterTarget != null && filterTarget.hasOwnProperty("value") ?
-      (filterTarget as EventTarget & {value: string})["value"]
+      (filterTarget as EventTarget & { value: string })["value"]
       : null;
-    if (this.usersDataSource != null  && filterValue != null)
+    if (this.usersDataSource != null && filterValue != null)
       this.usersDataSource.filter = filterValue.trim().toLowerCase();
   }
 
@@ -36,7 +37,7 @@ export class UsersAdminComponent implements OnInit {
     if (this.usersDataSource != null) {
       this
         .dialog
-        .open(UserCrudDialogComponent, {data: row})
+        .open(UserCrudDialogComponent, { data: row })
         .afterClosed()
         .subscribe((data: IUser | boolean) => {
           switch (typeof data) {

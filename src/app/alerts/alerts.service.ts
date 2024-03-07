@@ -15,14 +15,14 @@ export class AlertsService {
   public add(alert: string | TAlert | Error, action?: string | false, config?: MatSnackBarConfig): void {
     if (alert == null) return;
 
-    const objToStr = (obj: {[key: string]: any}): string => Object
+    const objToStr = (obj: { [key: string]: any }): string => Object
       .keys(obj)
       .map(k => obj[k])
       .join('\t');
 
     const toKnownElse = (k: string | number, els?: string): string => {
       const message: string = 'API server not available';
-      let known: Set<string|number> = new Set();
+      let known: Set<string | number> = new Set();
       known.add(504);
       known.add('Gateway Timeout');
 

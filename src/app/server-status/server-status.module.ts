@@ -15,4 +15,5 @@ import { ServerStatusComponent } from './server-status.component';
   providers: [ServerStatusService],
   exports: [ServerStatusComponent]
 })
-export class ServerStatusModule {}
+export class ServerStatusModule {
+}

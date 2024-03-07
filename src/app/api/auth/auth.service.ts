@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import {AlertsService} from "../../alerts/alerts.service";
+import { AlertsService } from "../../alerts/alerts.service";
 import { IAuthReq, ILoginResp } from './auth.interfaces';
 
 
@@ -69,15 +69,13 @@ export class AuthService {
   }
 
   public signinup(user: IAuthReq): Observable<IAuthReq | ILoginResp> {
-
-
     return (this.login(user) as Observable<ILoginResp>)
       .pipe(
-        catchError((err: any, caught: Observable<ILoginResp>): Observable<IAuthReq | ILoginResp> =>  {
+        catchError((err: any, caught: Observable<ILoginResp>): Observable<IAuthReq | ILoginResp> => {
             if (err && err.error && err.error.error_message && err.error.error_message === 'User not found')
               return this.register(user)
                 .pipe(
-                  map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }) as IAuthReq | ILoginResp)
+                  map(o => Object.assign(o.body!, { access_token: o.headers.get('X-Access-Token') }) as IAuthReq | ILoginResp)
                 );
             // tslint:disable:no-unused-expression
             if (typeof this.alertsService.add(err.error.error_message) !== "undefined")

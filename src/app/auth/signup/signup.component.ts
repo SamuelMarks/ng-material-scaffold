@@ -19,7 +19,8 @@ export class SignupComponent implements OnInit {
   constructor(private router: Router,
               private fb: UntypedFormBuilder,
               public authService: AuthService,
-              private alertsService: AlertsService) { }
+              private alertsService: AlertsService) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -38,7 +39,7 @@ export class SignupComponent implements OnInit {
               return;
             }
 
-            const at: string|null = res.headers.get('x-access-token');
+            const at: string | null = res.headers.get('x-access-token');
             if (at != null) {
               this.authService.accessToken = at;
               localStorage.setItem('access-token', at);
@@ -46,7 +47,8 @@ export class SignupComponent implements OnInit {
 
             this.router
               .navigate(['/secret-dashboard'])
-              .then(() => {});
+              .then(() => {
+              });
           }
         );
   }

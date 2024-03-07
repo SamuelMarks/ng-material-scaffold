@@ -5,7 +5,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
 import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
-import {getRedirectUrl} from "../../app-routing.module";
+import { getRedirectUrl } from "../../app-routing.module";
 
 
 @Component({
@@ -20,7 +20,8 @@ export class SigninupComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
               private fb: UntypedFormBuilder,
               public authService: AuthService,
-              private alertsService: AlertsService) {}
+              private alertsService: AlertsService) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -33,7 +34,8 @@ export class SigninupComponent implements OnInit, AfterViewInit {
     if (AuthService.loggedIn())
       this.router
         .navigate([getRedirectUrl(location.href) || '/secret-dashboard'])
-        .then(() => {});
+        .then(() => {
+        });
   }
 
   signInUp() {
@@ -44,7 +46,8 @@ export class SigninupComponent implements OnInit, AfterViewInit {
             if (user.hasOwnProperty('access_token')) {
               this.authService._login(user as ILoginResp);
               this.router.navigateByUrl(getRedirectUrl(location.href) || '/secret-dashboard')
-                .then(() => {})
+                .then(() => {
+                })
                 .catch(console.error);
             } else this.alertsService.add(`Unexpected: ${JSON.stringify(user)};`);
           }
