@@ -1,8 +1,7 @@
-import { provideServerRendering, renderModule } from "@angular/platform-server"
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { config } from './app/app.config.server';
 
-import { AppModule } from "./app/app.module";
-
-const bootstrap = () => renderModule(AppModule, {extraProviders: [provideServerRendering()]});
-// bootstrapApplication(AppComponent, config);
+const bootstrap = () => bootstrapApplication(AppComponent, config);
 
 export default bootstrap;

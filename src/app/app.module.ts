@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ApplicationConfig, Component, ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -22,39 +22,47 @@ import { AppRoutingModule } from './app.routes.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 
+const alert_module = AlertsModule.forRoot();
+
+export const AppImports: /*NgModule*/Component["imports"] = [
+  BrowserModule,
+  // AppRoutingModule,
+  BrowserAnimationsModule,
+  HttpClientModule,
+  LayoutModule,
+  BrowserAnimationsModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatGridListModule,
+  MatCardModule,
+  MatMenuModule,
+  alert_module as any,
+  SidenavModule
+];
+
+export const AppProviders: ApplicationConfig["providers"] /*NgModule["providers"]*/ = [
+  AuthGuard,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },
+  // provideClientHydration(),
+  // provideAnimationsAsync()
+];
+
+/*
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    LayoutModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    AlertsModule.forRoot(),
-    SidenavModule
-  ],
-  providers: [
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    provideClientHydration(),
-    provideAnimationsAsync()
-  ],
+  imports: AppImports,
+  providers: AppProviders,
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+*/
