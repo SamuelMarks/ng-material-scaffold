@@ -19,42 +19,46 @@ import { SidenavModule } from './sidenav/sidenav.module';
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptor } from './auth/auth.interceptors';
-import { AppRoutingModule } from './app.routes.module';
-import { AppComponent } from './app.component';
+// import { AppRoutingModule } from './app.routes.module';
+// import { AppComponent } from './app.component';
 
+export const AppImports = [
+  BrowserModule,
+  // AppRoutingModule,
+  BrowserAnimationsModule,
+  HttpClientModule,
+  LayoutModule,
+  BrowserAnimationsModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatGridListModule,
+  MatCardModule,
+  MatMenuModule,
+  AlertsModule.forRoot(),
+  SidenavModule
+];
+
+export const providers = [
+  AuthGuard,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },
+  provideClientHydration(),
+  provideAnimationsAsync()
+];
+
+/*
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    LayoutModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    AlertsModule.forRoot(),
-    SidenavModule
-  ],
-  providers: [
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    provideClientHydration(),
-    provideAnimationsAsync()
-  ],
+  declarations: [AppComponent],
+  imports,
+  providers,
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+*/

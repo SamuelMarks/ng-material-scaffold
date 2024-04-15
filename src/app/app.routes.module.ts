@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
@@ -28,9 +28,11 @@ const routes: Routes = [
 
 export const getRedirectUrl = (url: string): string | null => new URLSearchParams(url.slice(1)).get('redirectUrl');
 
+/*
 @NgModule({
   imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
 }
+*/
