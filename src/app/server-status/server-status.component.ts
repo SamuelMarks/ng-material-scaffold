@@ -19,7 +19,7 @@ export class ServerStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.serverStatus = { version: '@ 0.0.35; ' };
+    this.serverStatus = { version: '@ 0.0.43; ' };
     this.serverStatusService
       .get()
       .subscribe(
