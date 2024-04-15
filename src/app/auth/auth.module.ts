@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AuthService } from '../api/auth/auth.service';
 

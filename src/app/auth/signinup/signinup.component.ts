@@ -5,7 +5,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { IAuthReq, ILoginResp } from '../../api/auth/auth.interfaces';
 import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
-import { getRedirectUrl } from "../../app-routing.module";
+import { getRedirectUrl } from '../../app.routes.module';
 
 
 @Component({
