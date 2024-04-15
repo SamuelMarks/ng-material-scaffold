@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -20,7 +21,6 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptor } from './auth/auth.interceptors';
 import { AppRoutingModule } from './app.routes.module';
 import { AppComponent } from './app.component';
-import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 
 @NgModule({
   declarations: [

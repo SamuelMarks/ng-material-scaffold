@@ -21,8 +21,7 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:ng-material-scaffold": "node dist/ng-material-scaffold/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
