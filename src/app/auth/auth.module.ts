@@ -8,8 +8,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { AuthService } from '../api/auth/auth.service';
 
 import { SignupComponent } from './signup/signup.component';
@@ -24,7 +22,6 @@ import { authRoutes } from './auth.routes';
   imports: [
     CommonModule, RouterModule, RouterModule.forChild(authRoutes),
     FormsModule, ReactiveFormsModule,
-    FlexLayoutModule,
     MatInputModule, MatCardModule, MatFormFieldModule, MatButtonModule
   ],
   providers: [AuthService],
