@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, HostListener } from '@angular/core';
+
 import { Subject } from "rxjs";
 
 @Component({
@@ -11,7 +11,8 @@ export class AppComponent {
   title = "ng-material-scaffold";
   openedSubject = new Subject<boolean>();
 
-  dismissSidebar() {
+  // Close the sidebar when ESC is pressed
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(_: KeyboardEvent) {
     this.openedSubject.next(false);
   }
 }

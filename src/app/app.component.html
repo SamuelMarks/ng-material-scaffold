@@ -1,5 +1,9 @@
-<app-sidenav [openedSubject]="openedSubject"></app-sidenav>
+<app-sidenav #sidenav [openedSubject]="openedSubject"></app-sidenav>
 
-<div (click)="dismissSidebar()">
-  <router-outlet></router-outlet>
-</div>
+<span (click)="sidenav.close()">
+  <router-outlet class="app-body"></router-outlet>
+</span>
+
+<app-footer class="footer" (click)="sidenav.close()">
+  <app-server-status></app-server-status>
+</app-footer>

@@ -1,3 +1,5 @@
-<mat-toolbar-row *ngIf="serverStatus.version">
-  {{serverStatus.version}}
-</mat-toolbar-row>
+@if (serverStatus.version) {
+  <mat-toolbar-row>
+    {{ serverStatus.version }}
+  </mat-toolbar-row>
+}

@@ -20,6 +20,8 @@ import { AlertsModule } from './alerts/alerts.module';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptor } from './auth/auth.interceptors';
 import { AppRoutingModule } from './app.routes.module';
+import { FooterModule } from "./footer/footer.module";
+import { ServerStatusModule } from "./server-status/server-status.module";
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -28,11 +30,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     LayoutModule,
-    BrowserAnimationsModule,
+
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -41,8 +42,12 @@ import { AppComponent } from './app.component';
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
+
+    AppRoutingModule,
     AlertsModule.forRoot(),
-    SidenavModule
+    SidenavModule,
+    FooterModule,
+    ServerStatusModule
   ],
   providers: [
     AuthGuard,

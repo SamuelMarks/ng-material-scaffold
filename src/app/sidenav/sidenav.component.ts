@@ -43,4 +43,9 @@ export class SidenavComponent implements AfterContentInit {
     if (this.openedSubject != null && this.sidenav != null)
       this.openedSubject.next(!this.sidenav.opened);
   }
+
+  close() {
+    if (this.openedSubject != null && this.sidenav != null && this.sidenav.opened)
+      this.openedSubject.next(false);
+  }
 }

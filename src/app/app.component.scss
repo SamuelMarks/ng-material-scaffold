@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  max-height: 200px;
+  flex: 1;
+  background: #3f51b5 !important;
+  color: white;
+}
+
+.app-body {
+  margin: 0;
+  padding: 0;
+}
