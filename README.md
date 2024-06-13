@@ -3,7 +3,7 @@ ng-material-scaffold
 [![License](https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Angular build](https://github.com/SamuelMarks/ng-material-scaffold/actions/workflows/main.yml/badge.svg)](https://github.com/SamuelMarks/ng-material-scaffold/actions/workflows/main.yml)
 
-Simple scaffold generated with `@angular/cli` then implemented manually.
+Simple scaffold generated with [`@angular/cli`](https://github.com/angular/angular-cli) then implemented manually.
 
 ## Update version
 
