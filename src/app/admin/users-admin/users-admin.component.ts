@@ -46,7 +46,7 @@ export class UsersAdminComponent implements OnInit {
             case 'string':
             case 'number':
               if (row) this.userService
-                .destroy(row.email)
+                .destroy(row.username)
                 .subscribe(() => {
                   this.usersDataSource!.data.splice(this.usersDataSource!.data.indexOf(row), 1);
                   this.usersDataSource!._updateChangeSubscription();
@@ -61,14 +61,14 @@ export class UsersAdminComponent implements OnInit {
                        `this.usersDataSource.data[this.usersDataSource.data.indexOf(row)] = user;` */
                       this.usersDataSource!.data.splice(this.usersDataSource!.data.indexOf(row), 1);
                       this.usersDataSource!.data.push(Object.assign(row, data as IUser));
-                      this.usersDataSource!.data.sort((a, b) => a.email.localeCompare(b.email));
+                      this.usersDataSource!.data.sort((a, b) => a.username.localeCompare(b.username));
                       this.usersDataSource!._updateChangeSubscription();
                     })
                   : this.userService
                     .create(data as IUser)
                     .subscribe(user => {
                       this.usersDataSource!.data.push(user);
-                      this.usersDataSource!.data.sort((a, b) => a.email.localeCompare(b.email));
+                      this.usersDataSource!.data.sort((a, b) => a.username.localeCompare(b.username));
                       this.usersDataSource!._updateChangeSubscription();
                     })
               );

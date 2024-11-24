@@ -48,13 +48,15 @@ export class AuthService {
   }
 
   public login(user: IAuthReq): Observable<ILoginResp> | /*ObservableInput<{}> |*/ void {
-    localStorage.setItem('user', user.email);
+    localStorage.setItem('user', user.username);
+    user.grant_type = 'password';
     return this.http
-      .post<ILoginResp>('/api/auth', user);
+      .post<ILoginResp>('/api/token', user);
   }
 
   public register(user: IAuthReq): Observable<HttpResponse<IAuthReq>> {
-    localStorage.setItem('user', user.email);
+    localStorage.setItem('user', user.username);
+    user.grant_type = 'password';
     return this.http.post<IAuthReq>('/api/user', user, { observe: 'response' })
       .pipe(
         catchError((err: HttpErrorResponse) => {
@@ -69,6 +71,7 @@ export class AuthService {
   }
 
   public signinup(user: IAuthReq): Observable<IAuthReq | ILoginResp> {
+    user.grant_type = 'password';
     return (this.login(user) as Observable<ILoginResp>)
       .pipe(
         catchError((err: any, caught: Observable<ILoginResp>): Observable<IAuthReq | ILoginResp> => {

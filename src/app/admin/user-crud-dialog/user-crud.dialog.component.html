@@ -1,12 +1,12 @@
 @if (form != null) {
   <form (ngSubmit)="closeDialog()" [formGroup]="form">
-    @if (!data || !data.email) {
+    @if (!data || !data.username) {
       <mat-form-field>
         <input formControlName="email" matInput placeholder="Email" required type="email">
       </mat-form-field>
     }
-    @if (data && data.email) {
-      <h3 class="mat-h3">{{ data.email }}</h3>
+    @if (data && data.username) {
+      <h3 class="mat-h3">{{ data.username }}</h3>
     }
 
     @if (form.controls['password'].enabled) {

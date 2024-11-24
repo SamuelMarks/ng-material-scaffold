@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Params, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { AuthService } from '../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
 
 @Injectable()
-export class AuthGuard {
+export class AuthGuard implements CanActivate {
   constructor(private router: Router,
               private alertsService: AlertsService) {
   }
@@ -37,7 +37,7 @@ export class AuthGuard {
 
     this.router
       .navigate(['/auth'],
-        { queryParams: qp_a }); // .then(() => {});
+        { queryParams: qp_a }).then(() => {});
     return false;
   }
 }

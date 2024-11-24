@@ -24,34 +24,39 @@ import { FooterModule } from "./footer/footer.module";
 import { ServerStatusModule } from "./server-status/server-status.module";
 import { AppComponent } from './app.component';
 
-@NgModule({ declarations: [
-        AppComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        BrowserAnimationsModule,
-        LayoutModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-        MatGridListModule,
-        MatCardModule,
-        MatMenuModule,
-        AppRoutingModule,
-        AlertsModule.forRoot(),
-        SidenavModule,
-        FooterModule,
-        ServerStatusModule], providers: [
-        AuthGuard,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true,
-        },
-        provideClientHydration(),
-        provideAnimationsAsync(),
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  bootstrap: [AppComponent],
+  imports: [BrowserModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    AppRoutingModule,
+    AlertsModule.forRoot(),
+    SidenavModule,
+    FooterModule,
+    ServerStatusModule
+  ],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    provideClientHydration(),
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptorsFromDi())
+  ]
+})
 export class AppModule {
 }

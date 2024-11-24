@@ -1,5 +1,5 @@
 interface IUserDateType<T> {
-  email: string;
+  username: string;
   roles: string;
   password: string;
   createdAt: T;

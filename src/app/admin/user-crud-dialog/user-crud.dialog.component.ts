@@ -15,7 +15,7 @@ export class UserCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];
   roles = UserCrudDialogComponent.roles;
   form: UntypedFormGroup = new UntypedFormGroup({
-    email: new UntypedFormControl('', Validators.required),
+    username: new UntypedFormControl('', Validators.required),
     password: new UntypedFormControl('', Validators.minLength(3)),
     roles: new UntypedFormControl('', Validators.required)
   });

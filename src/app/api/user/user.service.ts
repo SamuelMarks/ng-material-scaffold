@@ -40,7 +40,7 @@ export class UserService {
     return this.http
       .get<{ users: IUserStringDates[] }>('/api/users')
       .pipe(
-        map(users => users.users.sort((a, b) => a.email.localeCompare(b.email))), // TODO: sort server-side
+        map(users => users.users.sort((a, b) => a.username.localeCompare(b.username))), // TODO: sort server-side
         map(users => users.map(parseDates))
       );
   }

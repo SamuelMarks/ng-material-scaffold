@@ -18,19 +18,19 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>,
             next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(AuthService.loggedIn() ?
-      req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()!) })
-      : req)
+      req.clone({headers: req.headers.set('Authorization', `Bearer ${AuthService.getAccessToken()}`)}) : req)
       .pipe(
         catchError((err: any, caught) => {
           if (err instanceof HttpErrorResponse)
             switch (err.status) {
+              case 401:
               case 403:
                 if (!this.router.isActive('auth', false)
                   /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
                   this.alertsService.add('Authentication required');
 
                   this.router
-                    .navigate(['auth'], { queryParams: { redirectUrl: this.router.url } })
+                    .navigate(['auth'], {queryParams: {redirectUrl: this.router.url}})
                     .then(success =>
                       success || this.alertsService.add('Unable to route to /auth'))
                     .catch(throwError);
