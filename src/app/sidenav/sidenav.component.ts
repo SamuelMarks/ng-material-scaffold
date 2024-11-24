@@ -10,9 +10,10 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../api/auth/auth.service';
 
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css']
+    selector: 'app-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrls: ['./sidenav.component.css'],
+    standalone: false
 })
 export class SidenavComponent implements AfterContentInit {
   loggedIn: typeof AuthService.loggedIn;

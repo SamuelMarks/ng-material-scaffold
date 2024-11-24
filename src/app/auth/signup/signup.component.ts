@@ -8,9 +8,10 @@ import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../../alerts/alerts.service';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+    selector: 'app-signup',
+    templateUrl: './signup.component.html',
+    styleUrls: ['./signup.component.css'],
+    standalone: false
 })
 export class SignupComponent implements OnInit {
   auth = new UntypedFormControl();

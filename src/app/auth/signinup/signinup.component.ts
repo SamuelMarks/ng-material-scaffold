@@ -9,9 +9,10 @@ import { getRedirectUrl } from '../../app.routes.module';
 
 
 @Component({
-  selector: 'app-signinup',
-  templateUrl: './signinup.component.html',
-  styleUrls: ['./signinup.component.css']
+    selector: 'app-signinup',
+    templateUrl: './signinup.component.html',
+    styleUrls: ['./signinup.component.css'],
+    standalone: false
 })
 export class SigninupComponent implements OnInit, AfterViewInit {
   auth = new UntypedFormControl();

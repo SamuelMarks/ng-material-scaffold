@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-secret-dashboard',
-  templateUrl: './secret-dashboard.component.html',
-  styleUrls: ['./secret-dashboard.component.css']
+    selector: 'app-secret-dashboard',
+    templateUrl: './secret-dashboard.component.html',
+    styleUrls: ['./secret-dashboard.component.css'],
+    standalone: false
 })
 export class SecretDashboardComponent implements OnInit {
 

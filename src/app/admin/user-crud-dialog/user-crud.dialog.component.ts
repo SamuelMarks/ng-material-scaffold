@@ -6,9 +6,10 @@ import { IUser } from "../../api/user/user.interfaces";
 
 
 @Component({
-  selector: 'app-admin.user-crud',
-  templateUrl: './user-crud.dialog.component.html',
-  styleUrls: ['./user-crud.dialog.component.css']
+    selector: 'app-admin.user-crud',
+    templateUrl: './user-crud.dialog.component.html',
+    styleUrls: ['./user-crud.dialog.component.css'],
+    standalone: false
 })
 export class UserCrudDialogComponent implements OnInit {
   static roles: string[] = ['registered', 'login', 'admin'];

@@ -4,8 +4,9 @@ import { AuthService } from '../../api/auth/auth.service';
 
 
 @Component({
-  selector: 'app-logout',
-  template: ''
+    selector: 'app-logout',
+    template: '',
+    standalone: false
 })
 export class LogoutComponent implements OnInit {
   constructor(private authService: AuthService) {

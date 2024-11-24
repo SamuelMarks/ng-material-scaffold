@@ -7,9 +7,10 @@ import { ServerStatusService } from "../api/server-status/server-status.service"
 
 
 @Component({
-  selector: 'app-server-status',
-  templateUrl: './server-status.component.html',
-  styleUrls: ['./server-status.component.css']
+    selector: 'app-server-status',
+    templateUrl: './server-status.component.html',
+    styleUrls: ['./server-status.component.css'],
+    standalone: false
 })
 export class ServerStatusComponent implements OnInit {
   @Input() serverStatus: IServerStatus = {} as IServerStatus;

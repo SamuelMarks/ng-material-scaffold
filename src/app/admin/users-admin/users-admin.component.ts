@@ -7,9 +7,10 @@ import { UserService } from "../../api/user/user.service";
 import { UserCrudDialogComponent } from '../user-crud-dialog/user-crud.dialog.component';
 
 @Component({
-  selector: 'app-users-admin',
-  templateUrl: './users-admin.component.html',
-  styleUrls: ['./users-admin.component.css']
+    selector: 'app-users-admin',
+    templateUrl: './users-admin.component.html',
+    styleUrls: ['./users-admin.component.css'],
+    standalone: false
 })
 export class UsersAdminComponent implements OnInit {
   usersDataSource: MatTableDataSource<IUser> | undefined;
