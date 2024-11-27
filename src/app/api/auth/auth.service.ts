@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, lastValueFrom } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { AlertsService } from "../../alerts/alerts.service";
@@ -35,11 +35,15 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('access-token');
-    localStorage.removeItem('user');
-    this.router
-      .navigate(['/'], this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } })
-      .catch(console.error);
+    lastValueFrom(this.http.post('/secured/logout', null)).then(() => {
+        localStorage.removeItem('access-token');
+        localStorage.removeItem('user');
+        this.accessToken = undefined;
+        return this.router
+          .navigate(['/'], this.router.url === '/auth/logout' ? {} : {queryParams: {redirectUrl: this.router.url}})
+          .catch(console.error)
+      }
+    ).then(console.error);
   }
 
   _login(loginResp: ILoginResp) {
@@ -57,7 +61,7 @@ export class AuthService {
   public register(user: IAuthReq): Observable<HttpResponse<IAuthReq>> {
     localStorage.setItem('user', user.username);
     user.grant_type = 'password';
-    return this.http.post<IAuthReq>('/api/user', user, { observe: 'response' })
+    return this.http.post<IAuthReq>('/api/user', user, {observe: 'response'})
       .pipe(
         catchError((err: HttpErrorResponse) => {
             if (err && err.error)
@@ -78,7 +82,7 @@ export class AuthService {
             if (err && err.error && err.error.error_message && err.error.error_message === 'User not found')
               return this.register(user)
                 .pipe(
-                  map(o => Object.assign(o.body!, { access_token: o.headers.get('X-Access-Token') }) as IAuthReq | ILoginResp)
+                  map(o => Object.assign(o.body!, {access_token: o.headers.get('X-Access-Token')}) as IAuthReq | ILoginResp)
                 );
             // tslint:disable:no-unused-expression
             if (typeof this.alertsService.add(err.error.error_message) !== "undefined")
