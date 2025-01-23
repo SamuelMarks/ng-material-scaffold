@@ -16,108 +16,112 @@ else
 fi
 set -feu
 
-# A safe version of `envsubst`
-# If a var is not found it leaves it
-# env -i BAR='haz'   "FOO ${BAR} CAN" -> "FOO haz CAN"
-# env -i             "FOO ${BAR} CAN" -> "FOO ${BAR} CAN"
-envsubst_safe() {
-  if [ -f "${1}" ]; then
-    src="$(cat -- "${1}"; printf 'a')"
-    src="${src%a}"
-  else
-    src="${1}"
-  fi
-  src_len=${#src}
+DIR=$(CDPATH='' cd -- "$(dirname -- "${this_file}")" && pwd)
 
-  eaten=0
-  tmp="${src}"
-  output=''
+BUILD_DIR="$(CDPATH='' cd -- "$(dirname -- "$(dirname -- "$(dirname -- "${this_file}")")")" && pwd)"'/dist/ng-material-scaffold/browser'
 
-  while [ -n "${tmp}" ]; do
-    rest="${tmp#?}"
-    ch="${tmp%"$rest"}"
-    tmp="${rest}"
-    # shellcheck disable=SC2003
-    eaten="$(expr "${eaten}" + 1)"
+env -i DIR="${DIR}" \
+       BUILD_DIR="${BUILD_DIR}" \
+       LISTEN="${LISTEN:-80}"
+       SERVER_NAME="${SERVER_NAME:-example.com}" \
+  # A safe version of `envsubst`
+  # If a var is not found it leaves it
+  # env -i BAR="haz"   "FOO ${BAR} CAN" -> "FOO haz CAN"
+  # env -i             "FOO ${BAR} CAN" -> "FOO ${BAR} CAN"
+  envsubst_safe() {
+    if [ -f "${1}" ]; then
+      src="$(cat -- "${1}"; printf "a")"
+      src="${src%a}"
+    else
+      src="${1}"
+    fi
+    src_len=${#src}
 
-    if [ "${ch}" = '$' ]; then
-      if [ -n "${tmp}" ]; then
-        rest="${tmp#?}"
-        next_ch="${tmp%"$rest"}"
+    eaten=0
+    tmp="${src}"
+    output=""
 
-        if [ "${next_ch}" = '{' ]; then
-          tmp="${rest}"
-          # shellcheck disable=SC2003
-          eaten="$(expr "${eaten}" + 1)"
-          var_name=''
-          found_closing_brace=0
-          while [ -n "${tmp}" ]; do
-            rest="${tmp#?}"
-            ch="${tmp%"${rest}"}"
+    while [ -n "${tmp}" ]; do
+      rest="${tmp#?}"
+      ch="${tmp%"$rest"}"
+      tmp="${rest}"
+      # shellcheck disable=SC2003
+      eaten="$(expr "${eaten}" + 1)"
+
+      if [ "${ch}" = "$" ]; then
+        if [ -n "${tmp}" ]; then
+          rest="${tmp#?}"
+          next_ch="${tmp%"$rest"}"
+
+          if [ "${next_ch}" = "{" ]; then
             tmp="${rest}"
             # shellcheck disable=SC2003
             eaten="$(expr "${eaten}" + 1)"
-            if [ "${ch}" = '}' ]; then
-              found_closing_brace=1
-              break
-            else
-              var_name="${var_name}${ch}"
-            fi
-          done
-          if [ "${found_closing_brace}" -eq 0 ]; then
-            output="${output}\${${var_name}"
-          else
-            if eval "[ \"\${$var_name+set}\" = \"set\" ]"; then
-              var_value="$(eval "printf '%s' \"\${$var_name}\"")"
-              output="${output}${var_value}"
-            else
-              output="${output}\${${var_name}}"
-            fi
-          fi
-        elif printf '%s' "${next_ch}" | grep -q '[a-zA-Z0-9_]'; then
-          var_name=''
-          while [ -n "${tmp}" ]; do
-            rest="${tmp#?}"
-            ch="${tmp%"$rest"}"
-            if printf '%s' "${ch}" | grep -qv '[a-zA-Z0-9_]'; then
-              break
-            else
-              var_name="${var_name}${ch}"
+            var_name=""
+            found_closing_brace=0
+            while [ -n "${tmp}" ]; do
+              rest="${tmp#?}"
+              ch="${tmp%"${rest}"}"
               tmp="${rest}"
               # shellcheck disable=SC2003
               eaten="$(expr "${eaten}" + 1)"
+              if [ "${ch}" = "}" ]; then
+                found_closing_brace=1
+                break
+              else
+                var_name="${var_name}${ch}"
+              fi
+            done
+            if [ "${found_closing_brace}" -eq 0 ]; then
+              output="${output}\${${var_name}"
+            else
+              if eval "[ \"\${$var_name+set}\" = \"set\" ]"; then
+                var_value="$(eval "printf %s \"\${$var_name}\"")"
+                output="${output}${var_value}"
+              else
+                output="${output}\${${var_name}}"
+              fi
             fi
-          done
-          if eval "[ \"\${$var_name+set}\" = \"set\" ]"; then
-            var_value="$(eval "printf '%s' \"\${$var_name}\"")"
-            output="${output}${var_value}"
+          elif printf "%s" "${next_ch}" | grep -q '"'"'[a-zA-Z0-9_]'"'"'; then
+            var_name=""
+            while [ -n "${tmp}" ]; do
+              rest="${tmp#?}"
+              ch="${tmp%"$rest"}"
+              if printf %s "${ch}" | grep -qv '"'"'[a-zA-Z0-9_]'"'"'; then
+                break
+              else
+                var_name="${var_name}${ch}"
+                tmp="${rest}"
+                # shellcheck disable=SC2003
+                eaten="$(expr "${eaten}" + 1)"
+              fi
+            done
+            if eval "[ \"\${$var_name+set}\" = \"set\" ]"; then
+              var_value="$(eval "printf \"%s\" \"\${$var_name}\"")"
+              output="${output}${var_value}"
+            else
+              output="${output}\$${var_name}"
+            fi
           else
-            output="${output}\$${var_name}"
+            output="${output}\$"
           fi
         else
           output="${output}\$"
         fi
       else
-        output="${output}\$"
+        output="${output}${ch}"
       fi
-    else
-      output="${output}${ch}"
+    done
+    if [ "${eaten}" -ne "${src_len}" ]; then
+      >&2 printf "Did not parse all of src: %d != %d\n" "${eaten}" "${src_len}"
+      exit 4
     fi
-  done
-  if [ "${eaten}" -ne "${src_len}" ]; then
-    >&2 printf 'Did not parse all of src: %d != %d\n' "${eaten}" "${src_len}"
-    exit 4
-  fi
-  printf '%s' "${output}"
-}
+    printf "%s" "${output}"
+  }
 
-DIR=$(CDPATH='' cd -- "$(dirname -- "${this_file}")" && pwd)
+  LOCATION=$(envsubst_safe "${DIR}"/location.conf)
+  export LOCATION
+  echo ----------
+  env
+  envsubst_safe "${DIR}"/server.conf > "${DIR}"/server_compiled.conf
 
-BUILD_DIR="$(CDPATH='' cd -- "$(dirname -- "$(dirname -- "$(dirname -- "${this_file}")")")" && pwd)"'/dist/ng-material-scaffold/browser'
-export BUILD_DIR
-export LISTEN="${LISTEN:-80}"
-export SERVER_NAME="${SERVER_NAME:-example.com}"
-LOCATION=$(envsubst_safe "${DIR}"'/location.conf')
-export LOCATION
-envsubst_safe "${DIR}"'/server.conf' > "${DIR}"'/server_compiled.conf'
-#       sed 's/${BUILD_DIR}/'"${BUILD_DIR+x}"'/;s/${LISTEN}/'"${LISTEN+x}"'/;s/${SERVER_NAME}/'"${SERVER_NAME+x}"'/' "${DIR}"'/server.conf'
