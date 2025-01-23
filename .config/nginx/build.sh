@@ -16,21 +16,16 @@ else
 fi
 set -feu
 
-# Function to save the current environment variables
 save_environment() {
-  ENV_SAVED_FILE=$(mktemp)
-  export ENV_SAVED_FILE
-  : > "$ENV_SAVED_FILE"
-
-  env | while IFS='' read -r line || [ -n "$line" ]; do
+  env | while IFS='' read -r line || [ -n "${line}" ]; do
     case "${line}" in
       *=*)
-        var_name=${line%%=*}
-        var_value=${line#*=}
+        var_name="${line%%=*}"
+        var_value="${line#*=}"
         # Validate variable name (POSIX compliant)
         if printf '%s\n' "${var_name}" | grep -Eq '^[A-Za-z_][A-Za-z0-9_]*$'; then
-          var_value=$(printf '%s' "$var_value" | sed "s/'/'\\\\''/g")
-          printf 'export %s='"'"'%s'"'"'\n' "${var_name}" "${var_value}" >> "${ENV_SAVED_FILE}"
+          var_value=$(printf '%s' "${var_value}" | sed "s/'/'\\\\''/g")
+          printf 'export %s='"'"'%s'"'"'\n' "${var_name}" "${var_value}"
         fi
         ;;
     esac
@@ -38,15 +33,19 @@ save_environment() {
 }
 
 clear_environment() {
-  env | while IFS='' read -r line || [ -n "$line" ]; do
-    var_name=${line%%=*}
-    unset "$var_name" || true
+  env | while IFS='' read -r line || [ -n "${line}" ]; do
+    var_name="${line%%=*}"
+    unset "${var_name}" || true
   done
 }
 
-save_environment
+ENV_SAVED_FILE="$(mktemp)"
+export ENV_SAVED_FILE
+save_environment >> "${ENV_SAVED_FILE}"
 
 clear_environment
+
+# Can't use `env -i` to export a function, so have to do^
 
 # A safe version of `envsubst`
 # If a var is not found it leaves it
@@ -154,7 +153,7 @@ export LOCATION
 envsubst_safe "${DIR}"'/server.conf' > "${DIR}"'/server_compiled.conf'
 
 # shellcheck disable=SC1090
-. "$ENV_SAVED_FILE"
+. "${ENV_SAVED_FILE}"
 
 rm -f "${ENV_SAVED_FILE}"
 unset ENV_SAVED_FILE
