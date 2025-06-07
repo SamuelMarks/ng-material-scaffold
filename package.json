@@ -1,6 +1,6 @@
 {
   "name": "ng-material-scaffold",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "description": "Simple scaffold generated with `@angular/cli` then implemented manually.",
   "keywords": [
     "angular",
@@ -25,24 +25,24 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.2.3",
-    "@angular/cdk": "^19.2.6",
-    "@angular/common": "^19.2.3",
-    "@angular/compiler": "^19.2.3",
-    "@angular/core": "^19.2.3",
-    "@angular/forms": "^19.2.3",
-    "@angular/material": "^19.2.6",
-    "@angular/platform-browser": "^19.2.3",
-    "@angular/platform-browser-dynamic": "^19.2.3",
-    "@angular/router": "^19.2.3",
+    "@angular/animations": "^20.0.2",
+    "@angular/cdk": "^20.0.2",
+    "@angular/common": "^20.0.2",
+    "@angular/compiler": "^20.0.2",
+    "@angular/core": "^20.0.2",
+    "@angular/forms": "^20.0.2",
+    "@angular/material": "^20.0.2",
+    "@angular/platform-browser": "^20.0.2",
+    "@angular/platform-browser-dynamic": "^20.0.2",
+    "@angular/router": "^20.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.4",
-    "@angular/cli": "^19.2.4",
-    "@angular/compiler-cli": "^19.2.3",
+    "@angular/build": "^20.0.1",
+    "@angular/cli": "^20.0.1",
+    "@angular/compiler-cli": "^20.0.2",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
@@ -50,6 +50,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.6.3"
+    "typescript": "~5.8.3"
   }
 }
