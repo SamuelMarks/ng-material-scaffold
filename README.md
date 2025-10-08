@@ -7,6 +7,8 @@ Simple scaffold generated with [`@angular/cli`](https://github.com/angular/angul
 
 For example server, see https://github.com/SamuelMarks/serve-actix-diesel-auth-scaffold
 
+FWIW: Eventually, most of this repo will be codegenerated from https://github.com/SamuelMarks/serve-actix-diesel-auth-scaffold/blob/master/openapi.json
+
 ## Update version
 
     sed -i "/this.serverStatus =/c\    this.serverStatus = { version: '@ $(jq -r .version package.json); '};" src/app/server-status/server-status.component.ts
