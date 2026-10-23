@@ -1,43 +1,65 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 
-import { Observable } from 'rxjs';
-
-import { AuthService } from '../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
+import { AuthService } from './auth.service';
 
-@Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private router: Router,
-              private alertsService: AlertsService) {
-  }
+/**
+ * Functional route guard that enforces authentication and role-based access.
+ *
+ * @param next Activated route snapshot containing route data.
+ * @param state Current router state snapshot.
+ * @returns True if navigation is permitted; false otherwise.
+ */
+export const authGuard: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+): boolean => inject(AuthGuard).canActivate(next, state);
 
-  canActivate(next: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    const correctRole = next.data && next.data["role"] ? AuthService.hasRole(next.data["role"]) : null;
-    if (AuthService.loggedIn() && (correctRole == null || correctRole))
+/**
+ * Route guard service that enforces authentication and role-based access.
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthGuard {
+  private readonly router = inject(Router);
+  private readonly alertsService = inject(AlertsService);
+  private readonly authService = inject(AuthService);
+
+  /**
+   * Evaluates whether the user is authenticated and authorized for the target route.
+   *
+   * @param next Activated route snapshot containing route data.
+   * @param state Current router state snapshot.
+   * @returns True if navigation is permitted; false otherwise.
+   */
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const roles = next.data?.['role'] as string[] | string | undefined;
+    const isAuthorized =
+      this.authService.isLoggedIn() && (roles == null || this.authService.hasRole(roles));
+
+    if (isAuthorized) {
       return true;
+    }
 
-    const [url /* :string */, qp /* :URLSearchParams */] = ((question: number): [string, URLSearchParams] => {
-      if (question < 0) return [state.url, new URLSearchParams()];
-      return [state.url.slice(0, question), new URLSearchParams(state.url.slice(question + 1))];
-    })(state.url.indexOf('?'));
+    const [path] = state.url.split('?');
 
-    const msg = `${correctRole != null ? 'Only ' + next.data["role"] + ' can' : 'Auth required to'} view ${url}`;
+    if (roles != null && !this.authService.hasRole(roles)) {
+      const label = Array.isArray(roles) ? roles.join(', ') : roles;
+      this.alertsService.add(`Only ${label} can view ${path}`);
+      return false;
+    }
 
-    this.alertsService.add(msg);
-    console.error(msg);
-
-    if (correctRole != null) return false;
-
-    qp.set('redirectUrl', url);
-
-    const qp_a: Params = {};
-    qp.forEach((k, v) => qp_a[v] = k);
-
-    this.router
-      .navigate(['/auth'],
-        { queryParams: qp_a }).then(() => {});
+    this.alertsService.add(`Auth required to view ${path}`);
+    void this.router
+      .navigate(['/auth'], { queryParams: { redirectUrl: path } })
+      .catch(() => undefined);
     return false;
   }
 }

@@ -1,15 +1,26 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ServerStatusService } from './server-status.service';
 
 describe('ServerStatusService', () => {
-  beforeEach(() => {
+  it('requests the server status endpoint', () => {
     TestBed.configureTestingModule({
-      providers: [ServerStatusService]
+      imports: [HttpClientTestingModule],
+      providers: [ServerStatusService],
     });
-  });
 
-  it('should be created', inject([ServerStatusService], (service: ServerStatusService) => {
-    expect(service).toBeTruthy();
-  }));
+    const service = TestBed.inject(ServerStatusService);
+    const httpMock = TestBed.inject(HttpTestingController);
+
+    service.get().subscribe((status) => {
+      expect(status.version).toBe('1.0.0');
+    });
+
+    const req = httpMock.expectOne('/api');
+    expect(req.request.method).toBe('GET');
+    req.flush({ version: '1.0.0' });
+
+    httpMock.verify();
+  });
 });

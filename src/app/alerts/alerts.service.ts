@@ -1,57 +1,75 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { TAlert } from './alerts.types';
 
-@Injectable()
-export class AlertsService {
-  alerts: string[];
+const DEFAULT_ALERT = 'API server not available';
 
-  constructor(private snackBar: MatSnackBar) {
-    this.alerts = [];
+/**
+ * Centralized alerting service for surfacing messages via snack bars.
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class AlertsService {
+  private readonly snackBar = inject(MatSnackBar);
+
+  add(
+    alert: string | TAlert | Error | HttpErrorResponse,
+    action?: string | false,
+    config?: MatSnackBarConfig,
+  ): void {
+    if (alert == null) {
+      return;
+    }
+
+    const message = this.resolveMessage(alert);
+    const snackBarAction =
+      typeof action === 'string' ? action : action === false ? undefined : 'Close';
+
+    this.snackBar.open(message, snackBarAction, config);
   }
 
-  public add(alert: string | TAlert | Error, action?: string | false, config?: MatSnackBarConfig): void {
-    if (alert == null) return;
+  private resolveMessage(alert: string | TAlert | Error | HttpErrorResponse): string {
+    if (typeof alert === 'string') {
+      return alert;
+    }
 
-    const objToStr = (obj: { [key: string]: any }): string => Object
-      .keys(obj)
-      .map(k => obj[k])
+    if (alert instanceof HttpErrorResponse) {
+      return AlertsService.toKnownElse(alert.status, alert.statusText);
+    }
+
+    if (alert instanceof Error) {
+      return AlertsService.toKnownElse(alert.message);
+    }
+
+    if (AlertsService.isAlertWithErrorMessage(alert)) {
+      return alert.error_message;
+    }
+
+    if (AlertsService.isAlertWithMessage(alert)) {
+      return alert.message;
+    }
+
+    return Object.values(alert)
+      .map((value) => String(value))
       .join('\t');
+  }
 
-    const toKnownElse = (k: string | number, els?: string): string => {
-      const message: string = 'API server not available';
-      let known: Set<string | number> = new Set();
-      known.add(504);
-      known.add('Gateway Timeout');
+  private static toKnownElse(value: string | number, fallback?: string): string {
+    const known = new Set<string | number>([504, 'Gateway Timeout']);
+    if (known.has(value)) {
+      return fallback ?? String(value);
+    }
+    return DEFAULT_ALERT;
+  }
 
-      /*const known: {[key: string]: string} &  {[key: number]: string} | {[key: string]: string} | {[key: number]: string} = {
-        'Gateway Timeout': 'API server not available',
-        504: 'API server not available'
-      };*/
-      return known.has(k) ? (els == null ? k.toString() : els) : message;
-    };
+  private static isAlertWithErrorMessage(alert: TAlert): alert is { error_message: string } {
+    return typeof (alert as { error_message?: unknown }).error_message === 'string';
+  }
 
-    const alertMessage: string = ((): string => {
-      switch (typeof alert) {
-        case 'string':
-          return alert;
-        case 'object':
-          if (alert instanceof HttpErrorResponse || ['status', 'statusText'].every(alert.hasOwnProperty))
-            return toKnownElse((alert as HttpErrorResponse).status, (alert as HttpErrorResponse).statusText);
-          else if (alert instanceof Error) return toKnownElse(alert.message);
-          else return objToStr(alert);
-        default:
-          console.error(alert);
-          return 'undefined alert';
-      }
-    })();
-    // console.warn('AlertService::alerts =', this.alerts, ';');
-    this.snackBar.open(
-      alertMessage,
-      !action && typeof action !== 'boolean' ? 'Close' : action as string,
-      config
-    );
+  private static isAlertWithMessage(alert: TAlert): alert is { message: string } {
+    return typeof (alert as { message?: unknown }).message === 'string';
   }
 }

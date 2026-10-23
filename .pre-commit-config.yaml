@@ -1,0 +1,49 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+        exclude: ^(\.vscode/|tsconfig.*\.json$)
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  - repo: local
+    hooks:
+      - id: format
+        name: Check code formatting (auto-fix and recheck)
+        entry: bash -c 'npm run format && npm run format:check'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: lint
+        name: Lint (ESLint + JSDoc coverage)
+        entry: npm run lint
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: build
+        name: Build
+        entry: npm run build
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: test
+        name: Test
+        entry: npm test
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: update-shields
+        name: Add/update '% doc coverage' and '% test coverage' shields in README.md
+        entry: npm run update-shields
+        language: system
+        pass_filenames: false
+        always_run: true

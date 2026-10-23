@@ -1,0 +1,28 @@
+<form (submit)="onSubmit(); $event.preventDefault()" class="example-container" novalidate>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input [formField]="loginForm.username" autocomplete="username" matInput type="text" />
+    @if (loginForm.username().invalid() && loginForm.username().touched()) {
+      <mat-error>Username is required.</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      [formField]="loginForm.password"
+      autocomplete="current-password"
+      matInput
+      type="password"
+    />
+    @if (loginForm.password().invalid() && loginForm.password().touched()) {
+      <mat-error>Password must be at least 3 characters.</mat-error>
+    }
+  </mat-form-field>
+
+  @if (submissionError(); as errorMessage) {
+    <p class="error" role="alert">{{ errorMessage }}</p>
+  }
+
+  <button [disabled]="loginForm().invalid()" mat-raised-button type="submit">Sign in</button>
+</form>

@@ -1,0 +1,17 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+}
+
+mat-form-field,
+button {
+  width: 100%;
+}
+
+.error {
+  color: #b00020;
+  font-weight: 600;
+  margin: 0;
+}

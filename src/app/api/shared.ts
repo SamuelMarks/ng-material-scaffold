@@ -1,10 +1,18 @@
-// TODO: Figure out a generic way of check if strings are dates and converting for all attributes
-
+/**
+ * Common date fields for API models.
+ */
 export interface IDates<T> {
   createdAt: T;
   updatedAt: T;
 }
 
-export const parseDates = <T>(obj: IDates<string> & T): T & IDates<Date> => Object.assign(obj, {
-  createdAt: new Date(obj.createdAt), updatedAt: new Date(obj.updatedAt)
+/**
+ * Converts a payload with ISO date strings to native Date objects.
+ */
+export const parseDates = <T extends IDates<string>>(
+  obj: T,
+): Omit<T, keyof IDates<string>> & IDates<Date> => ({
+  ...obj,
+  createdAt: new Date(obj.createdAt),
+  updatedAt: new Date(obj.updatedAt),
 });

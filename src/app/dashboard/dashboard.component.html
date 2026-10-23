@@ -1,18 +1,24 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
+  <h1>Dashboard</h1>
   <mat-grid-list cols="2" rowHeight="350px">
-    @for (card of cards | async; track card) {
+    @for (card of cards(); track card.title) {
       <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
               {{ card.title }}
-              <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
-                <mat-icon>more_vert</mat-icon>
+              <button
+                [attr.aria-label]="'More options for ' + card.title"
+                [matMenuTriggerFor]="menu"
+                class="more-button"
+                mat-icon-button
+                type="button"
+              >
+                <mat-icon aria-hidden="true">more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
+                <button mat-menu-item type="button">Expand</button>
+                <button mat-menu-item type="button">Remove</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>

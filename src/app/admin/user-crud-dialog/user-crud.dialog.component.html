@@ -1,45 +1,68 @@
-@if (form != null) {
-  <form (ngSubmit)="closeDialog()" [formGroup]="form">
-    @if (!data || !data.username) {
-      <mat-form-field>
-        <input formControlName="email" matInput placeholder="Email" required type="email">
-      </mat-form-field>
-    }
-    @if (data && data.username) {
-      <h3 class="mat-h3">{{ data.username }}</h3>
-    }
+<h2 mat-dialog-title>
+  @if (isEditing()) {
+    Edit User: {{ userModel().username }}
+  } @else {
+    Create User
+  }
+</h2>
 
-    @if (form.controls['password'].enabled) {
+<form (submit)="closeDialog(); $event.preventDefault()" novalidate>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input [formField]="userForm.username" autocomplete="username" matInput type="text" />
+      @if (userForm.username().invalid() && userForm.username().touched()) {
+        <mat-error>Username is required.</mat-error>
+      }
+    </mat-form-field>
+
+    @if (!userForm.password().disabled()) {
       <mat-form-field>
-        <input formControlName="password" matInput placeholder="Password" required type="password">
+        <mat-label>Password</mat-label>
+        <input
+          [formField]="userForm.password"
+          autocomplete="new-password"
+          matInput
+          type="password"
+        />
+        @if (userForm.password().invalid() && userForm.password().touched()) {
+          <mat-error>Password must be at least 3 characters.</mat-error>
+        }
       </mat-form-field>
     }
 
     <mat-form-field>
-      <mat-select formControlName="roles" matInput multiple placeholder="Role">
+      <mat-label>Roles</mat-label>
+      <mat-select [formField]="userForm.roles" multiple>
         @for (role of roles; track role) {
           <mat-option [value]="role">
             {{ role }}
           </mat-option>
         }
       </mat-select>
+      @if (userForm.roles().invalid() && userForm.roles().touched()) {
+        <mat-error>At least one role is required.</mat-error>
+      }
     </mat-form-field>
+  </mat-dialog-content>
 
-    @if (!data) {
-      <button [disabled]="form.invalid" class="btn" mat-raised-button type="submit">
-        <mat-icon>add_to_queue</mat-icon>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    @if (!isEditing()) {
+      <button [disabled]="userForm().invalid()" class="btn" mat-raised-button type="submit">
+        <mat-icon aria-hidden="true">add_to_queue</mat-icon>
         Create
       </button>
     }
-    @if (data) {
-      <button [disabled]="form.invalid" class="btn" mat-raised-button type="submit">
-        <mat-icon>update</mat-icon>
+    @if (isEditing()) {
+      <button [disabled]="userForm().invalid()" class="btn" mat-raised-button type="submit">
+        <mat-icon aria-hidden="true">update</mat-icon>
         Update
       </button>
-      <button (click)="destroy = true" class="btn" mat-raised-button type="submit">
-        <mat-icon>delete</mat-icon>
+      <button (click)="deleteUser()" class="btn" mat-raised-button type="button">
+        <mat-icon aria-hidden="true">delete</mat-icon>
         Delete
       </button>
     }
-  </form>
-}
+  </mat-dialog-actions>
+</form>

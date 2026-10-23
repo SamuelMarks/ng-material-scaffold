@@ -1,83 +1,160 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { IUser } from "../../api/user/user.interfaces";
-import { UserService } from "../../api/user/user.service";
-import { UserCrudDialogComponent } from '../user-crud-dialog/user-crud.dialog.component';
+import { IUser, UserUpsert } from '../../api/user/user.interfaces';
+import { UserService } from '../../api/user/user.service';
+import {
+  UserCrudDialogComponent,
+  UserDialogResult,
+} from '../user-crud-dialog/user-crud.dialog.component';
 
+/**
+ * Admin UI for managing users.
+ */
 @Component({
-    selector: 'app-users-admin',
-    templateUrl: './users-admin.component.html',
-    styleUrls: ['./users-admin.component.css'],
-    standalone: false
+  selector: 'app-users-admin',
+  templateUrl: './users-admin.component.html',
+  styleUrl: './users-admin.component.css',
+  imports: [
+    DatePipe,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatTableModule,
+    MatToolbarModule,
+  ],
 })
-export class UsersAdminComponent implements OnInit {
-  usersDataSource: MatTableDataSource<IUser> | undefined;
-  displayedColumns = ['email', 'roles', 'createdAt'];
+export class UsersAdminComponent {
+  private readonly dialog = inject(MatDialog);
+  private readonly userService = inject(UserService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(public dialog: MatDialog,
-              private userService: UserService) {
-  }
+  /** Columns displayed in the users table. */
+  readonly displayedColumns = ['username', 'roles', 'createdAt'];
+  /** Current lowercase search filter string. */
+  readonly filterValue = signal('');
+  /** All loaded users. */
+  readonly users = signal<IUser[]>([]);
 
-  ngOnInit() {
+  /** Filtered users computed purely from `users` and `filterValue`. */
+  readonly filteredUsers = computed(() => {
+    const query = this.filterValue();
+    const list = this.users();
+    if (!query) {
+      return list;
+    }
+    return list.filter(
+      (user) =>
+        user.username.toLowerCase().includes(query) ||
+        user.roles.some((role) => role.toLowerCase().includes(query)),
+    );
+  });
+
+  /**
+   * Loads the initial list of users from the API.
+   */
+  constructor() {
     this.userService
       .getAll()
-      .subscribe((users: IUser[]) => this.usersDataSource = new MatTableDataSource(users.sort()));
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((users) => this.users.set(users));
   }
 
-  applyFilter(filterTarget: EventTarget | null) {
-    const filterValue: string | null = filterTarget != null && filterTarget.hasOwnProperty("value") ?
-      (filterTarget as EventTarget & { value: string })["value"]
-      : null;
-    if (this.usersDataSource != null && filterValue != null)
-      this.usersDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  openUserCrud(row?: IUser) {
-    if (this.usersDataSource != null) {
-      this
-        .dialog
-        .open(UserCrudDialogComponent, { data: row })
-        .afterClosed()
-        .subscribe((data: IUser | boolean) => {
-          switch (typeof data) {
-            case 'boolean':
-            case 'string':
-            case 'number':
-              if (row) this.userService
-                .destroy(row.username)
-                .subscribe(() => {
-                  this.usersDataSource!.data.splice(this.usersDataSource!.data.indexOf(row), 1);
-                  this.usersDataSource!._updateChangeSubscription();
-                });
-              break;
-            case 'object':
-              (row ?
-                  this.userService
-                    .update(data as IUser)
-                    .subscribe((user: IUser) => {
-                      /* TODO: Figure out how to update in-place, like:
-                       `this.usersDataSource.data[this.usersDataSource.data.indexOf(row)] = user;` */
-                      this.usersDataSource!.data.splice(this.usersDataSource!.data.indexOf(row), 1);
-                      this.usersDataSource!.data.push(Object.assign(row, data as IUser));
-                      this.usersDataSource!.data.sort((a, b) => a.username.localeCompare(b.username));
-                      this.usersDataSource!._updateChangeSubscription();
-                    })
-                  : this.userService
-                    .create(data as IUser)
-                    .subscribe(user => {
-                      this.usersDataSource!.data.push(user);
-                      this.usersDataSource!.data.sort((a, b) => a.username.localeCompare(b.username));
-                      this.usersDataSource!._updateChangeSubscription();
-                    })
-              );
-          }
-        });
+  /**
+   * Updates `filterValue` when the filter input changes.
+   *
+   * @param event DOM input event from the filter text field.
+   */
+  applyFilter(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLInputElement) {
+      this.filterValue.set(target.value.trim().toLowerCase());
     }
   }
 
-  selected(row: IUser) {
+  /**
+   * Opens the user CRUD dialog for creating or editing a user.
+   *
+   * @param row Optional existing user row to edit or delete.
+   */
+  openUserCrud(row?: IUser): void {
+    const dialogRef = this.dialog.open(UserCrudDialogComponent, { data: row ?? null });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result?: UserDialogResult) => {
+        if (!result) {
+          return;
+        }
+
+        switch (result.action) {
+          case 'delete':
+            this.handleDelete(result.user.username);
+            break;
+          case 'update':
+            this.handleUpdate(result.user, row?.username);
+            break;
+          case 'create':
+            this.handleCreate(result.user);
+            break;
+        }
+      });
+  }
+
+  /**
+   * Handles selection of a user row to open the edit dialog.
+   *
+   * @param row Selected user record.
+   */
+  selected(row: IUser): void {
     this.openUserCrud(row);
+  }
+
+  private handleCreate(payload: UserUpsert): void {
+    this.userService
+      .create(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((created) => {
+        this.users.update((users) => UsersAdminComponent.sortUsers([...users, created]));
+      });
+  }
+
+  private handleUpdate(payload: UserUpsert, existingUsername?: string): void {
+    this.userService
+      .update(payload, existingUsername)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((updated) => {
+        this.users.update((users) =>
+          UsersAdminComponent.sortUsers(
+            users.map((user) =>
+              user.username === (existingUsername ?? updated.username) ? updated : user,
+            ),
+          ),
+        );
+      });
+  }
+
+  private handleDelete(username: string): void {
+    this.userService
+      .destroy(username)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.users.update((users) => users.filter((user) => user.username !== username));
+      });
+  }
+
+  private static sortUsers(users: IUser[]): IUser[] {
+    return [...users].sort((a, b) => a.username.localeCompare(b.username));
   }
 }

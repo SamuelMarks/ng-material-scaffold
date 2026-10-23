@@ -1,25 +1,31 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { Observable, of, throwError } from 'rxjs';
 
+import { SecretService } from './secret-service.service';
 import { SecretDashboardComponent } from './secret-dashboard.component';
 
 describe('SecretDashboardComponent', () => {
-  let component: SecretDashboardComponent;
-  let fixture: ComponentFixture<SecretDashboardComponent>;
-
-  beforeEach(waitForAsync(() => {
+  const setup = (response$: Observable<string>) => {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      declarations: [SecretDashboardComponent]
-    })
-      .compileComponents();
-  }));
+      imports: [SecretDashboardComponent],
+      providers: [{ provide: SecretService, useValue: { get: () => response$ } }],
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SecretDashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    return TestBed.createComponent(SecretDashboardComponent).componentInstance;
+  };
+
+  it('stores the secret when the API succeeds', () => {
+    const component = setup(of('top-secret'));
+
+    expect(component.secret()).toBe('top-secret');
+    expect(component.secretError()).toBeNull();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('stores errors when the API fails', () => {
+    const component = setup(throwError(() => new Error('fail')));
+
+    expect(component.secret()).toBeNull();
+    expect(component.secretError()).toBeTruthy();
   });
 });

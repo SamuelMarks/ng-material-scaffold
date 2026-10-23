@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { AuthService } from '../../api/auth/auth.service';
+import { AuthService } from '../auth.service';
 
-
+/**
+ * Performs logout side effects on init.
+ */
 @Component({
-    selector: 'app-logout',
-    template: '',
-    standalone: false
+  selector: 'app-logout',
+  template: '',
 })
 export class LogoutComponent implements OnInit {
-  constructor(private authService: AuthService) {
-  }
+  private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  ngOnInit() {
-    this.authService.logout();
+  /**
+   * Triggers user logout when the component initializes.
+   */
+  ngOnInit(): void {
+    this.authService.logout().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 }

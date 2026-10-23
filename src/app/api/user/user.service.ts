@@ -1,47 +1,43 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { parseDates } from '../shared';
-import { IUser, IUserStringDates } from './user.interfaces';
+import { IUser, IUserStringDates, UserUpsert } from './user.interfaces';
 
-
-@Injectable()
+/**
+ * API client for user management.
+ */
+@Injectable({
+  providedIn: 'root',
+})
 export class UserService {
-  constructor(private http: HttpClient) {
+  private readonly http = inject(HttpClient);
+
+  create(user: UserUpsert): Observable<IUser> {
+    return this.http.post<IUserStringDates>('/api/user', user).pipe(map(parseDates));
   }
 
-  create(user: IUser): Observable<IUser> {
-    return this.http
-      .post<IUserStringDates>('/api/user', user)
-      .pipe(map(parseDates));
+  read(userId?: string): Observable<IUser> {
+    const suffix = userId ? `/${userId}` : '';
+    return this.http.get<IUserStringDates>(`/api/user${suffix}`).pipe(map(parseDates));
   }
 
-  read(user_id?: string): Observable<IUser> {
-    return this.http
-      .get<IUserStringDates>(`/api/user${user_id == null ? '' : '/' + user_id}`)
-      .pipe(map(parseDates));
+  update(user: UserUpsert, userId?: string): Observable<IUser> {
+    const suffix = userId ? `/${userId}` : '';
+    return this.http.put<IUserStringDates>(`/api/user${suffix}`, user).pipe(map(parseDates));
   }
 
-  update(user: IUser, user_id?: string): Observable<IUser> {
-    return this.http
-      .put<IUserStringDates>(`/api/user${user_id == null ? '' : '/' + user_id}`, user)
-      .pipe(map(parseDates));
-  }
-
-  destroy(user_id: string): Observable<{}> {
-    return this.http
-      .delete(`/api/user/${user_id}`);
+  destroy(userId: string): Observable<void> {
+    return this.http.delete<void>(`/api/user/${userId}`);
   }
 
   getAll(): Observable<IUser[]> {
-    return this.http
-      .get<{ users: IUserStringDates[] }>('/api/users')
-      .pipe(
-        map(users => users.users.sort((a, b) => a.username.localeCompare(b.username))), // TODO: sort server-side
-        map(users => users.map(parseDates))
-      );
+    return this.http.get<{ users: IUserStringDates[] }>('/api/users').pipe(
+      map((response) => response.users.sort((a, b) => a.username.localeCompare(b.username))),
+      map((users) => users.map(parseDates)),
+    );
   }
 }

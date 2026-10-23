@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { SigninupComponent } from './signinup/signinup.component';
-import { SignupComponent } from './signup/signup.component';
-import { LoginComponent } from './login/login.component';
+import { AuthRegisterOrLogin } from './auth-register-or-login/auth-register-or-login';
 import { LogoutComponent } from './logout/logout.component';
 
-
+/**
+ * Authentication-related routes.
+ */
 export const authRoutes: Routes = [
-  { path: '', component: SigninupComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LogoutComponent }
+  { path: '', component: AuthRegisterOrLogin },
+  { path: 'login', component: AuthRegisterOrLogin },
+  { path: 'signup', component: AuthRegisterOrLogin },
+  { path: 'logout', component: LogoutComponent },
 ];

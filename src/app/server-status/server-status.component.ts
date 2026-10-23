@@ -1,35 +1,48 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { AlertsService } from '../alerts/alerts.service';
-import { IServerStatus } from "../api/server-status/server-status.interfaces";
-import { ServerStatusService } from "../api/server-status/server-status.service";
+import { ServerStatusService } from '../api/server-status/server-status.service';
 
+const APP_VERSION = '0.0.44';
 
+/**
+ * Displays the application and API server versions.
+ */
 @Component({
-    selector: 'app-server-status',
-    templateUrl: './server-status.component.html',
-    styleUrls: ['./server-status.component.css'],
-    standalone: false
+  selector: 'app-server-status',
+  template: `
+    @if (status()) {
+      <span class="server-status">{{ status() }}</span>
+    }
+  `,
 })
-export class ServerStatusComponent implements OnInit {
-  @Input() serverStatus: IServerStatus = {} as IServerStatus;
+export class ServerStatusComponent {
+  private readonly alertsService = inject(AlertsService);
+  private readonly serverStatusService = inject(ServerStatusService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private serverStatusService: ServerStatusService,
-              private alertsService: AlertsService) {
-  }
+  /** Current status text shown in the UI. */
+  readonly status = signal('');
 
-  ngOnInit() {
-    this.serverStatus = { version: '@ 0.0.44; ' };
+  /**
+   * Initializes the server status check against the backend API.
+   */
+  constructor() {
+    this.status.set(`@ ${APP_VERSION}; `);
     this.serverStatusService
       .get()
-      .subscribe(
-        serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,
-        (error: HttpErrorResponse) => {
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (serverStatus) => {
+          this.status.update((value) => `${value}API ${serverStatus.version}`);
+        },
+        error: (error: HttpErrorResponse) => {
           const msg = error.status === 504 ? 'API server not available' : error.statusText;
           this.alertsService.add(msg);
-          this.serverStatus.version += msg;
-        }
-      );
+          this.status.update((value) => `${value}${msg}`);
+        },
+      });
   }
 }

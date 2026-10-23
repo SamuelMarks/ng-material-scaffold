@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
 import { IServerStatus } from './server-status.interfaces';
 
-
-@Injectable()
+/**
+ * API client for server status.
+ */
+@Injectable({
+  providedIn: 'root',
+})
 export class ServerStatusService {
-  constructor(private http: HttpClient) {
-  }
+  private readonly http = inject(HttpClient);
 
   get(): Observable<IServerStatus> {
     return this.http.get<IServerStatus>('/api');

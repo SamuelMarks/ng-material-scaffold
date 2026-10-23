@@ -1,16 +1,17 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
-    #sidenav
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [attr.role]="isHandset() ? 'dialog' : 'navigation'"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [(opened)]="opened"
+    aria-label="Side navigation"
     class="sidenav"
     fixedInViewport="true"
-  > <!-- [opened]="(opened | async)" -->
-    <mat-toolbar color="primary" style="padding-left: 0 !important">
-      <app-server-status></app-server-status>
+  >
+    <mat-toolbar class="sidenav-toolbar" color="primary">
+      <app-server-status />
     </mat-toolbar>
-    <mat-nav-list>
-      @if (loggedIn()) {
+    <mat-nav-list aria-label="Main navigation">
+      @if (isLoggedIn()) {
         @if (hasRole('admin')) {
           <a mat-list-item routerLink="/admin">Admin</a>
         }
@@ -23,15 +24,11 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        (click)="toggle()"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        type="button">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      <button (click)="toggle()" aria-label="Toggle sidenav" mat-icon-button type="button">
+        <mat-icon aria-hidden="true">menu</mat-icon>
       </button>
       <a routerLink="/">ng-material-scaffold</a>
     </mat-toolbar>
-    <!-- Add Content Here -->
+    <ng-content />
   </mat-sidenav-content>
 </mat-sidenav-container>

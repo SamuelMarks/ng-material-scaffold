@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
+/**
+ * Footer wrapper for app-level content.
+ */
 @Component({
-    selector: 'app-footer',
-    templateUrl: './footer.component.html',
-    styleUrl: './footer.component.scss',
-    standalone: false
+  selector: 'app-footer',
+  template: '<footer><ng-content /></footer>',
+  styleUrl: './footer.component.scss',
 })
 export class FooterComponent {}

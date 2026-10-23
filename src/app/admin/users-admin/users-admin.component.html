@@ -1,38 +1,47 @@
-<mat-toolbar color="secondary"  style="background: #F5F5F5 !important;">
-  <h1 class="mat-h1">Users</h1>
+<mat-toolbar class="users-toolbar">
+  <h1>Users</h1>
 
   <span class="example-fill-remaining-space"></span>
 
-  <button (click)="openUserCrud()" mat-icon-button>
-    <mat-icon>add_circle</mat-icon>
+  <button (click)="openUserCrud()" aria-label="Create user" mat-icon-button type="button">
+    <mat-icon aria-hidden="true">add_circle</mat-icon>
   </button>
   <span class="example-fill-remaining-space"></span>
-  <mat-form-field floatPlaceholder="never">
-    <input (keyup)="applyFilter($event.target)" matInput placeholder="Filter">
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input (input)="applyFilter($event)" matInput type="text" />
   </mat-form-field>
 </mat-toolbar>
 
-@if (usersDataSource != null) {
-  <mat-table #table [dataSource]="usersDataSource">
-    <ng-container matColumnDef="email">
-      <mat-header-cell *cdkHeaderCellDef> Email</mat-header-cell>
-      <mat-cell *cdkCellDef="let element">
-        <mat-icon>border_color</mat-icon>
-        {{element.email}}
+@if (users().length > 0) {
+  <mat-table [dataSource]="filteredUsers()">
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-icon aria-hidden="true">border_color</mat-icon>
+        {{ element.username }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="roles">
-      <mat-header-cell *cdkHeaderCellDef> Roles</mat-header-cell>
-      <mat-cell *cdkCellDef="let element"> {{element.roles}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.roles.join(', ') }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="createdAt">
-      <mat-header-cell *cdkHeaderCellDef> createdAt</mat-header-cell>
-      <mat-cell *cdkCellDef="let element"> {{element.createdAt}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Created</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.createdAt | date: 'mediumDate' }}</mat-cell>
     </ng-container>
 
-    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row (click)="selected(row)" *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      (click)="selected(row)"
+      (keydown.enter)="selected(row)"
+      (keydown.space)="selected(row); $event.preventDefault()"
+      *matRowDef="let row; columns: displayedColumns"
+      [attr.aria-label]="'Edit user ' + row.username"
+      role="button"
+      tabindex="0"
+    ></mat-row>
   </mat-table>
 }

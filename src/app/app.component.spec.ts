@@ -1,29 +1,27 @@
-import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
+  it('creates the component', () => {
+    const component = new AppComponent();
+    expect(component).toBeTruthy();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  it('closes the sidenav', () => {
+    const component = new AppComponent();
+    component.sidenavOpened.set(true);
+
+    component.closeSidenav();
+
+    expect(component.sidenavOpened()).toBeFalse();
   });
 
-  it(`should have the 'ng-material-scaffold' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ng-material-scaffold');
-  });
+  it('sets the sidenav state', () => {
+    const component = new AppComponent();
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, ng-material-scaffold');
+    component.setSidenavOpened(true);
+    expect(component.sidenavOpened()).toBeTrue();
+
+    component.setSidenavOpened(false);
+    expect(component.sidenavOpened()).toBeFalse();
   });
 });

@@ -1,52 +1,86 @@
-import { AfterContentInit, Component, Input, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, DestroyRef, inject, model } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthService } from '../api/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { ServerStatusComponent } from '../server-status/server-status.component';
 
+/**
+ * Side navigation shell with responsive behavior and auth-aware links.
+ */
 @Component({
-    selector: 'app-sidenav',
-    templateUrl: './sidenav.component.html',
-    styleUrls: ['./sidenav.component.css'],
-    standalone: false
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrl: './sidenav.component.css',
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    RouterLink,
+    ServerStatusComponent,
+  ],
 })
-export class SidenavComponent implements AfterContentInit {
-  loggedIn: typeof AuthService.loggedIn;
-  hasRole: typeof AuthService.hasRole;
+export class SidenavComponent {
+  /** Two-way bound signal tracking whether the sidenav is open. */
+  readonly opened = model<boolean>(false);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(map(result => result.matches));
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly destroyRef = inject(DestroyRef);
 
-  @Input() openedSubject: Subject<boolean> | undefined;
-  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav | undefined;
+  /** Reactive flag indicating whether the viewport matches a handset breakpoint. */
+  readonly isHandset = toSignal(
+    this.breakpointObserver.observe(Breakpoints.Handset).pipe(map((result) => result.matches)),
+    { initialValue: false },
+  );
 
-  constructor(private breakpointObserver: BreakpointObserver,
-              private router: Router) {
-    this.loggedIn = AuthService.loggedIn;
-    this.hasRole = AuthService.hasRole;
+  /** Computed authentication status signal from AuthService. */
+  readonly isLoggedIn = this.authService.isLoggedIn;
+
+  /**
+   * Subscribes to router navigation events to automatically close the sidenav.
+   */
+  constructor() {
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.close();
+    });
   }
 
-  ngAfterContentInit() {
-    if (this.openedSubject != null && this.sidenav != null) {
-      this.openedSubject.subscribe(
-        open => this.sidenav![open ? 'open' : 'close']()
-      );
-      this.router.events.subscribe(() => this.openedSubject!.next(false));
+  /**
+   * Checks whether the current user has the specified role.
+   *
+   * @param role Role name to check.
+   * @returns True if the user holds the role.
+   */
+  hasRole(role: string): boolean {
+    return this.authService.hasRole(role);
+  }
+
+  /**
+   * Toggles the open state of the sidenav.
+   */
+  toggle(): void {
+    this.opened.update((isOpen) => !isOpen);
+  }
+
+  /**
+   * Closes the sidenav if it is currently open.
+   */
+  close(): void {
+    if (this.opened()) {
+      this.opened.set(false);
     }
-  }
-
-  toggle() {
-    if (this.openedSubject != null && this.sidenav != null)
-      this.openedSubject.next(!this.sidenav.opened);
-  }
-
-  close() {
-    if (this.openedSubject != null && this.sidenav != null && this.sidenav.opened)
-      this.openedSubject.next(false);
   }
 }

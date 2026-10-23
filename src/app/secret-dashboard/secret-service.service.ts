@@ -1,14 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 
-@Injectable()
+/**
+ * API client for loading the secret dashboard content.
+ */
+@Injectable({
+  providedIn: 'root',
+})
 export class SecretService {
-  constructor(private http: HttpClient) {
-  }
+  private readonly http = inject(HttpClient);
 
-  public get(): Observable<string> {
-    return this.http.get('/secured/secret', {responseType: 'text'});
+  get(): Observable<string> {
+    return this.http.get('/secured/secret', { responseType: 'text' });
   }
 }
